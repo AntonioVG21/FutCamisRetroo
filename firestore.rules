@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Las reglas para mensajes de contacto han sido eliminadas
+    
+    // Reglas para pedidos
+    match /orders/{orderId} {
+      // Cualquiera puede crear un pedido
+      allow create: if request.resource.data.customer is map &&
+                     request.resource.data.items is list &&
+                     request.resource.data.total is number &&
+                     request.resource.data.paymentMethod is string &&
+                     request.resource.data.status is string;
+      
+      // Permitir lectura y actualización de pedidos para todos (para desarrollo)
+      allow read, update: if true;
+      
+      // Solo el administrador puede eliminar pedidos
+      allow delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para descuentos
+    match /discounts/{discountId} {
+      // Permitir lectura, creación y actualización de descuentos para todos (para desarrollo)
+      allow read, create, update: if true;
+      
+      // Solo el administrador puede eliminar descuentos
+      allow delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
