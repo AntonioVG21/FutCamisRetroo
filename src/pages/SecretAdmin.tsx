@@ -326,7 +326,7 @@ const SecretAdmin: React.FC = () => {
             className="cursor-pointer transition-transform hover:scale-105"
           >
             <img 
-              src="../imagenes/camisetas-web/Logo-removebg-preview.png" 
+              src="/imagenes/camisetas-web/Logo-removebg-preview.png" 
               alt="Logo" 
               className="h-32 mb-8" 
             />
