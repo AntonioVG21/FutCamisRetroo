@@ -127,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
           </nav>
 
           {/* Contact Button and Cart */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <a 
               href="https://wa.me/34640660362" 
               target="_blank"

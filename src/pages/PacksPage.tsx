@@ -49,9 +49,9 @@ const PacksPage: React.FC = () => {
   };
 
   // Agrupar packs por tipo (Promesa, Profesional, Icono)
-  const promesaPacks = packs.filter(pack => pack.name.toLowerCase().includes('promesa'));
-  const profesionalPacks = packs.filter(pack => pack.name.toLowerCase().includes('profesional'));
-  const iconoPacks = packs.filter(pack => pack.name.toLowerCase().includes('icono'));
+  const promesaPacks = packs.filter(pack => pack.type === 'promesa');
+  const profesionalPacks = packs.filter(pack => pack.type === 'profesional');
+  const iconoPacks = packs.filter(pack => pack.type === 'icono');
   
   // Ordenar cada grupo por cantidad (individual, x5, x10)
   const sortByJerseyCount = (a: Pack, b: Pack) => a.jerseyCount - b.jerseyCount;
@@ -119,23 +119,23 @@ const PacksPage: React.FC = () => {
             </div>
           </div>
           
-          {/* Grid principal de 3 columnas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {/* Columna 1: Packs Promesa */}
-            <div className="flex flex-col space-y-8">
+          {/* Sección de Packs Promesa */}
+          <div className="mb-20">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#cd7f32] mb-10 text-center">PACKS PROMESA</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {/* Pack Promesa Individual */}
               {promesaIndividual.map((pack) => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513] h-full flex flex-col"
                   >
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdHRlcm4gaWQ9InBhdHRlcm4iIHg9IjAiIHk9IjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgMjBMMjAgMEw0MCAyMEwyMCA0MFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NkN2YzMiIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')] opacity-20"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent opacity-20"></div>
                     <div className="absolute inset-0 border-2 border-[#b87333] rounded-xl"></div>
                     <div className="absolute inset-0 border-[1px] border-[#cd7f32] rounded-xl opacity-50 transform scale-[0.99]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-[#cd7f32] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                         {pack.name}
                       </h3>
@@ -148,11 +148,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                          <span className="mr-2 text-[#cd7f32]">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                           <span className="mr-2 text-[#cd7f32]">✓</span>
                           Envío rápido y seguro
@@ -171,7 +174,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#cd7f32] to-[#b87333] text-white shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#cd7f32] to-[#b87333] text-white shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">
@@ -194,14 +197,14 @@ const PacksPage: React.FC = () => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513] h-full flex flex-col"
                   >
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdHRlcm4gaWQ9InBhdHRlcm4iIHg9IjAiIHk9IjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgMjBMMjAgMEw0MCAyMEwyMCA0MFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NkN2YzMiIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')] opacity-20"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent opacity-20"></div>
                     <div className="absolute inset-0 border-2 border-[#b87333] rounded-xl"></div>
                     <div className="absolute inset-0 border-[1px] border-[#cd7f32] rounded-xl opacity-50 transform scale-[0.99]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-[#cd7f32] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                         {pack.name}
                       </h3>
@@ -229,11 +232,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                          <span className="mr-2 text-[#cd7f32]">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-gray-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                           <span className="mr-2 text-[#cd7f32]">✓</span>
                           Envío rápido y seguro
@@ -252,7 +258,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#cd7f32] to-[#b87333] text-white shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#cd7f32] to-[#b87333] text-white shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">
@@ -270,15 +276,18 @@ const PacksPage: React.FC = () => {
                 );
               })}
             </div>
-            
-            {/* Columna 2: Packs Profesional */}
-            <div className="flex flex-col space-y-8">
+          </div>
+          
+          {/* Sección de Packs Profesional */}
+          <div className="mb-20">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#ffd700] mb-10 text-center">PACKS PROFESIONAL</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {/* Pack Profesional Individual */}
               {profesionalIndividual.map((pack) => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b] h-full flex flex-col"
                   >
                     {/* Fondo base dorado con brillo */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b]"></div>
@@ -299,7 +308,7 @@ const PacksPage: React.FC = () => {
                     <div className="absolute inset-0 border-[1px] border-[#ffd700] rounded-xl opacity-90 transform scale-[0.98]"></div>
                     <div className="absolute inset-0 border-[1px] border-[#ffed4e] rounded-xl opacity-60 transform scale-[0.96]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-black drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)]">
                         {pack.name}
                       </h3>
@@ -312,11 +321,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
-                          <span className="mr-2 text-black">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                           <span className="mr-2 text-black">✓</span>
                           Envío rápido y seguro
@@ -335,7 +347,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#ffd700] to-[#ffcc00] text-black shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#ffd700] to-[#ffcc00] text-black shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">
@@ -358,7 +370,7 @@ const PacksPage: React.FC = () => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b] h-full flex flex-col"
                   >
                     {/* Fondo base dorado con brillo */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#ffd700] via-[#ffed4e] to-[#b8860b]"></div>
@@ -379,7 +391,7 @@ const PacksPage: React.FC = () => {
                     <div className="absolute inset-0 border-[1px] border-[#ffd700] rounded-xl opacity-90 transform scale-[0.98]"></div>
                     <div className="absolute inset-0 border-[1px] border-[#ffed4e] rounded-xl opacity-60 transform scale-[0.96]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-black drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)]">
                         {pack.name}
                       </h3>
@@ -407,11 +419,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
-                          <span className="mr-2 text-black">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                           <span className="mr-2 text-black">✓</span>
                           Envío rápido y seguro
@@ -430,7 +445,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#ffd700] to-[#ffcc00] text-black shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#ffd700] to-[#ffcc00] text-black shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">
@@ -448,15 +463,18 @@ const PacksPage: React.FC = () => {
                 );
               })}
             </div>
-            
-            {/* Columna 3: Packs Icono */}
-            <div className="flex flex-col space-y-8">
+          </div>
+          
+          {/* Sección de Packs Icono */}
+          <div className="mb-20">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#daa520] mb-10 text-center">PACKS ICONO</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {/* Pack Icono Individual */}
               {iconoIndividual.map((pack) => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-white to-[#f5f5f5]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-white to-[#f5f5f5] h-full flex flex-col"
                   >
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZGVmcz48cGF0dGVybiBpZD0ibWFyYmxlIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNMCwwIEwyMDAsMjAwIE0tNTAsLTUwIEwyNTAsMjUwIE0tMjUsLTI1IEwyMjUsMjI1IE0yNSwtMjUgTDIyNSwxNzUgTS01MCwwIEwyMDAsMjUwIE0wLC01MCBMMjUwLDIwMCIgc3Ryb2tlPSIjZjVmNWY1IiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMyIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjbWFyYmxlKSIvPjwvc3ZnPg==')] opacity-40"></div>
                     <div className="absolute inset-0">
@@ -467,7 +485,7 @@ const PacksPage: React.FC = () => {
                     <div className="absolute inset-0 border-[3px] border-[#daa520] rounded-xl opacity-70"></div>
                     <div className="absolute inset-0 border-[1px] border-[#ffd700] rounded-xl opacity-40 transform scale-[0.98]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-[#daa520] drop-shadow-[0_2px_2px_rgba(255,255,255,0.3)]">
                         {pack.name}
                       </h3>
@@ -480,11 +498,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                          <span className="mr-2 text-[#4a90e2]">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                           <span className="mr-2 text-[#4a90e2]">✓</span>
                           Envío rápido y seguro
@@ -503,7 +524,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#daa520] to-[#b8860b] text-white shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#daa520] to-[#b8860b] text-white shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">
@@ -526,7 +547,7 @@ const PacksPage: React.FC = () => {
                 return (
                   <div 
                     key={pack.id} 
-                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-white to-[#f5f5f5]"
+                    className="relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 bg-gradient-to-br from-white to-[#f5f5f5] h-full flex flex-col"
                   >
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZGVmcz48cGF0dGVybiBpZD0ibWFyYmxlIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNMCwwIEwyMDAsMjAwIE0tNTAsLTUwIEwyNTAsMjUwIE0tMjUsLTI1IEwyMjUsMjI1IE0yNSwtMjUgTDIyNSwxNzUgTS01MCwwIEwyMDAsMjUwIE0wLC01MCBMMjUwLDIwMCIgc3Ryb2tlPSIjZjVmNWY1IiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMyIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjbWFyYmxlKSIvPjwvc3ZnPg==')] opacity-40"></div>
                     <div className="absolute inset-0">
@@ -537,7 +558,7 @@ const PacksPage: React.FC = () => {
                     <div className="absolute inset-0 border-[3px] border-[#daa520] rounded-xl opacity-70"></div>
                     <div className="absolute inset-0 border-[1px] border-[#ffd700] rounded-xl opacity-40 transform scale-[0.98]"></div>
                     
-                    <div className="p-6 md:p-8 relative">
+                    <div className="p-6 md:p-8 relative flex flex-col flex-grow">
                       <h3 className="text-2xl font-bold mb-3 text-[#daa520] drop-shadow-[0_2px_2px_rgba(255,255,255,0.3)]">
                         {pack.name}
                       </h3>
@@ -565,11 +586,14 @@ const PacksPage: React.FC = () => {
                         {pack.description}
                       </p>
                     
+                      <div className="mb-6 text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+                        <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                        <div className="whitespace-pre-line text-base">
+                          {pack.specifications}
+                        </div>
+                      </div>
+                      
                       <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                          <span className="mr-2 text-[#4a90e2]">✓</span>
-                          {pack.jerseyCount} Camisetas de fútbol
-                        </li>
                         <li className="flex items-center text-gray-800 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                           <span className="mr-2 text-[#4a90e2]">✓</span>
                           Envío rápido y seguro
@@ -588,7 +612,7 @@ const PacksPage: React.FC = () => {
                           handleAddToCart(pack);
                         }}
                         disabled={loading === pack.id}
-                        className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#daa520] to-[#b8860b] text-white shadow-md hover:shadow-lg`}
+                        className={`mt-auto w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-[#daa520] to-[#b8860b] text-white shadow-md hover:shadow-lg`}
                       >
                         {loading === pack.id ? (
                           <div className="flex items-center justify-center">

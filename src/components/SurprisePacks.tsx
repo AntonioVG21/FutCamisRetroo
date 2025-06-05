@@ -53,9 +53,9 @@ const SurprisePacks: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {packs.filter(pack => pack.jerseyCount === 1).map((pack) => {
-            const isPromesa = pack.name.toLowerCase().includes('promesa');
-            const isProfesional = pack.name.toLowerCase().includes('profesional');
-            const isIcono = pack.name.toLowerCase().includes('icono');
+            const isPromesa = pack.type === 'promesa';
+            const isProfesional = pack.type === 'profesional';
+            const isIcono = pack.type === 'icono';
 
             const baseStyle = isPromesa
               ? 'bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513]' // Cobre mejorado
@@ -149,11 +149,14 @@ const SurprisePacks: React.FC = () => {
                     {pack.description}
                   </p>
                 
+                <div className={`mb-6 ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
+                  <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+                  <div className="whitespace-pre-line text-base">
+                    {pack.specifications}
+                  </div>
+                </div>
+                
                 <ul className="space-y-3 mb-8">
-                    <li className={`flex items-center ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
-                      <span className={`mr-2 ${isPromesa ? 'text-[#cd7f32]' : isProfesional ? 'text-black' : 'text-[#4a90e2]'}`}>✓</span>
-                      {pack.jerseyCount} Camisetas de fútbol
-                    </li>
                     <li className={`flex items-center ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
                       <span className={`mr-2 ${isPromesa ? 'text-[#cd7f32]' : isProfesional ? 'text-black' : 'text-[#4a90e2]'}`}>✓</span>
                       Envío rápido y seguro

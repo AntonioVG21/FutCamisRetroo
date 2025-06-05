@@ -97,11 +97,14 @@ const PackCard: React.FC<PackCardProps> = ({ pack, loading, handleAddToCart, typ
           {pack.description}
         </p>
       
+        <div className={`mb-6 ${textColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}>
+          <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
+          <div className="whitespace-pre-line text-base">
+            {pack.specifications}
+          </div>
+        </div>
+        
         <ul className="space-y-3 mb-8">
-          <li className={`flex items-center ${textColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}>
-            <span className={`mr-2 ${checkColor}`}>✓</span>
-            {pack.jerseyCount} Camisetas de fútbol
-          </li>
           <li className={`flex items-center ${textColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}>
             <span className={`mr-2 ${checkColor}`}>✓</span>
             Envío rápido y seguro
