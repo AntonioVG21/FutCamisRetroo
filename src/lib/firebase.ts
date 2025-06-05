@@ -7,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAm00tZ3sBgdxXpYRnCgmVhFLlKZ-X0C4k",
-  authDomain: "futcamisretros-b2413.firebaseapp.com",
-  projectId: "futcamisretros-b2413",
-  storageBucket: "futcamisretros-b2413.appspot.com",
-  messagingSenderId: "917265355922",
-  appId: "1:917265355922:web:650947024c0efa3a78424b",
-  measurementId: "G-C45EQ17CFC"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 console.log('Inicializando Firebase con configuración:', firebaseConfig);
