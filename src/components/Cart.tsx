@@ -128,15 +128,11 @@ const Cart: React.FC = () => {
                           <p>• {item.jerseyCount} Camisetas de fútbol</p>
 
                         </div>
+                        <div className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm whitespace-pre-line">
+                          {item.specifications || 'No hay especificaciones disponibles'}
+                        </div>
                         <textarea
-                          placeholder="Especificaciones del pack (tallas, equipos preferidos...)"
-                          value={item.specifications || ''}
-                          onChange={(e) => updateSpecifications(item.id, e.target.value)}
-                          className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm"
-                          rows={2}
-                        />
-                        <textarea
-                          placeholder="Equipaciones que NO deseas recibir"
+                          placeholder="Pon el equipo que no quieres que te toque"
                           value={item.notes || ''}
                           onChange={(e) => updateNotes(item.id, e.target.value)}
                           className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm"

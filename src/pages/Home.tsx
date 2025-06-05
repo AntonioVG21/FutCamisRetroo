@@ -35,9 +35,9 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900">
+    <div className="flex flex-col min-h-screen bg-gray-900 w-full overflow-x-hidden">
       <Header onLogoClick={handleLogoClick} />
-      <main className="flex-grow pt-16">
+      <main className="flex-grow pt-16 w-full">
         <Hero />
         <LeagueBlocks />
         <FeaturedJerseys />

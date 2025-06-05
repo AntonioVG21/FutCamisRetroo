@@ -21,7 +21,7 @@ const FeaturedJerseys: React.FC = () => {
 
   return (
     <section className="py-16 bg-gray-800">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             CAMISETAS <span className="text-yellow-500">DESTACADAS</span>
@@ -31,7 +31,7 @@ const FeaturedJerseys: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {featuredJerseys.map((jersey) => (
             <div 
               key={jersey.id} 

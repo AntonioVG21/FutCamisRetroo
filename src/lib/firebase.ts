@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence, initializeFirestore, CACHE_SIZE_UNLIMITED, PersistenceSettings } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
@@ -30,10 +30,31 @@ try {
   app = initializeApp(firebaseConfig);
   console.log('Firebase app inicializado correctamente');
 
-  // Initialize Firestore with default settings
-  console.log('Inicializando Firestore...');
-  db = getFirestore(app);
-  console.log('Firestore inicializado correctamente');
+  // Initialize Firestore with optimized settings
+  console.log('Inicializando Firestore con configuración optimizada...');
+  db = initializeFirestore(app, {
+    cacheSizeBytes: CACHE_SIZE_UNLIMITED,
+    // Desactivar long polling y volver a WebSockets para resolver el error de SID
+    experimentalForceLongPolling: false,
+    experimentalAutoDetectLongPolling: true,
+    ignoreUndefinedProperties: true, // Ignorar propiedades indefinidas
+  });
+  console.log('Firestore inicializado correctamente con configuración optimizada');
+  
+  // Comentamos la persistencia temporalmente para resolver problemas de conexión
+  // enableIndexedDbPersistence(db)
+  //   .then(() => {
+  //     console.log('Persistencia de Firestore habilitada correctamente');
+  //   })
+  //   .catch((err) => {
+  //     if (err.code === 'failed-precondition') {
+  //       console.warn('La persistencia de Firestore no pudo ser habilitada porque múltiples pestañas están abiertas');
+  //     } else if (err.code === 'unimplemented') {
+  //       console.warn('El navegador actual no soporta todas las características necesarias para la persistencia');
+  //     } else {
+  //       console.error('Error al habilitar persistencia:', err);
+  //     }
+  //   });
 
   console.log('Inicializando Storage...');
   storage = getStorage(app);

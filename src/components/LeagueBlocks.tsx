@@ -49,7 +49,7 @@ const LeagueBlock: React.FC<{
 const LeagueBlocks: React.FC = () => {
   return (
     <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             SELECCIONA <span className="text-yellow-500">TU LIGA</span>

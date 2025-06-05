@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Menu, X, Trophy, ShieldCheck, Globe, PhoneCall, Heart } from 'lucide-react';
 import { leagues } from '../data/leagues';
 import { useCartStore } from '../store/cartStore';
 import { useFavoritesStore } from '../store/favoritesStore';
 import logoImage from '../imagenes/camisetas-web/Logo-removebg-preview.png';
-import { useNavigate } from 'react-router-dom';
 
-interface HeaderProps {
-  onLogoClick?: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
+const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [leaguesMenuOpen, setLeaguesMenuOpen] = useState(false);
+  const [logoClickCount, setLogoClickCount] = useState(0);
   const { items, toggleCart } = useCartStore();
   const { items: favoriteItems } = useFavoritesStore();
-  const [logoClickCount, setLogoClickCount] = useState(0);
-  const navigate = useNavigate();
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -30,56 +24,36 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
     setLeaguesMenuOpen(!leaguesMenuOpen);
   };
 
-  // Función para manejar los clics en el logo
   const handleLogoClick = () => {
-    // Si se proporciona una función onLogoClick, usarla
-    if (onLogoClick) {
-      onLogoClick();
-      return;
-    }
+    const newCount = logoClickCount + 1;
+    setLogoClickCount(newCount);
     
-    // De lo contrario, usar la implementación predeterminada
-    setLogoClickCount(prevCount => {
-      const newCount = prevCount + 1;
-      if (newCount === 5) {
-        // Redirigir a la página de administración secreta
-        navigate('/secret-admin');
-        return 0; // Reiniciar el contador
-      }
-      return newCount;
-    });
-  };
-
-  // Efecto para reiniciar el contador después de un tiempo
-  useEffect(() => {
-    if (logoClickCount > 0) {
-      const timer = setTimeout(() => {
+    if (newCount === 5) {
+      window.location.href = '/admin';
+      setLogoClickCount(0);
+    } else {
+      // Reset counter after 3 seconds if not completed
+      setTimeout(() => {
         setLogoClickCount(0);
-      }, 3000); // Reiniciar después de 3 segundos
-      return () => clearTimeout(timer);
+      }, 3000);
     }
-  }, [logoClickCount]);
+  };
 
   return (
     <header className="bg-gradient-to-r from-black to-gray-900 text-white fixed w-full z-50 shadow-lg">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center">
-            <img 
-              src={logoImage} 
-              alt="FutCamisRetros Logo" 
-              className="h-10 mr-2 cursor-pointer" 
-              onClick={handleLogoClick} 
-            />
-            <div className="text-2xl font-bold">
+          <div className="flex items-center flex-shrink-0 lg:w-1/4 w-auto">
+            <img src={logoImage} alt="FutCamisRetros Logo" className="h-10 mr-2 cursor-pointer" onClick={handleLogoClick} />
+            <div className="text-2xl font-bold mr-2 truncate">
               <span className="text-yellow-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">FutCamis</span>
               <span className="text-white drop-shadow-[0_1px_2px_rgba(255,215,0,0.3)]">Retros</span>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-12 mx-auto justify-center w-2/4">
             <a href="/" className="font-medium hover:text-yellow-500 transition-all duration-300 transform hover:scale-105 border-b-2 border-transparent hover:border-yellow-500 pb-1">
               Inicio
             </a>
@@ -127,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
           </nav>
 
           {/* Contact Button and Cart */}
-          <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="flex items-center space-x-2 flex-shrink-0 lg:w-1/4 w-auto justify-end">
             <a 
               href="https://wa.me/34640660362" 
               target="_blank"
@@ -137,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
               <PhoneCall className="h-4 w-4 mr-2 animate-pulse" />
               WhatsApp
             </a>
-            <a href="/favorites" className="relative p-2 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-md">
+            <a href="/favorites" className="relative p-2 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-md ml-3">
               <Heart className="h-6 w-6 text-red-400 hover:text-red-500 transition-colors" />
               {favoriteItems.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-md">
@@ -147,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
             </a>
             <button 
               onClick={toggleCart} 
-              className="relative p-2 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-md"
+              className="relative p-2 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-md ml-3"
             >
               <ShoppingCart className="h-6 w-6 text-yellow-400 hover:text-yellow-500 transition-colors" />
               {totalItems > 0 && (
@@ -158,14 +132,14 @@ const Header: React.FC<HeaderProps> = ({ onLogoClick }) => {
             </button>
             
             {/* Mobile Menu Button */}
-            <button
+            <button 
+              className="lg:hidden p-2 focus:outline-none" 
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-md"
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6 text-red-400 hover:text-red-500 transition-colors" />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6 text-yellow-400 hover:text-yellow-500 transition-colors" />
+                <Menu className="h-6 w-6" />
               )}
             </button>
           </div>

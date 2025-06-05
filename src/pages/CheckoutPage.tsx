@@ -118,6 +118,12 @@ const CheckoutPage: React.FC = () => {
   const handlePaymentMethod = async (method: 'paypal' | 'bizum') => {
     console.log(`Método de pago seleccionado: ${method}`);
     try {
+      // Desplazar la página hacia arriba
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
       if (!validateForm()) {
         toast.error('Por favor, completa todos los campos obligatorios.');
         return;
@@ -426,20 +432,16 @@ const CheckoutPage: React.FC = () => {
                       
                       {item.isPack && (
                         <div className="mt-2 space-y-2">
-                          <textarea
-                            placeholder="Especificaciones del pack (tallas, equipos preferidos...)"
-                            value={item.specifications || ''}
-                            onChange={(e) => updateSpecifications(item.id, e.target.value)}
-                            className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                            rows={2}
-                          />
-                          <textarea
-                            placeholder="Equipaciones que NO deseas recibir"
-                            value={item.notes || ''}
-                            onChange={(e) => updateNotes(item.id, e.target.value)}
-                            className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                            rows={2}
-                          />
+                          <div
+                            className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm whitespace-pre-line"
+                          >
+                            <span className="text-gray-400">Especificaciones del pack:</span> {item.specifications || 'No hay especificaciones'}
+                          </div>
+                          <div
+                            className="w-full bg-gray-700 text-white rounded px-3 py-2 text-sm whitespace-pre-line"
+                          >
+                            <span className="text-gray-400">Equipaciones que NO deseas recibir:</span> {item.notes || 'No especificado'}
+                          </div>
                         </div>
                       )}
                     </div>

@@ -38,24 +38,24 @@ const SurprisePacks: React.FC = () => {
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:20px_20px]"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="w-full px-4 relative z-10">
         <div className="text-center mb-12">
           <div className="inline-block bg-yellow-500 p-3 rounded-full mb-4">
             <Package className="h-8 w-8 text-black" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            PACKS <span className="text-yellow-500">SORPRESA</span>
+            PACKS <span className="text-yellow-500">SORPRESAS</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            ¿Te atreves a probar suerte? Consigue camisetas a precios increíbles con nuestros packs sorpresa
+            Descubre nuestros packs sorpresa únicos. Pulseras, cromos, llaveros y mucho más para verdaderos fans
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {packs.filter(pack => pack.jerseyCount === 1).map((pack) => {
-            const isPromesa = pack.type === 'promesa';
-            const isProfesional = pack.type === 'profesional';
-            const isIcono = pack.type === 'icono';
+          {packs.filter(pack => pack.jerseyCount === 0 && pack.id.includes('-1') && !pack.id.includes('-10')).map((pack) => {
+            const isPromesa = pack.name.toLowerCase().includes('promesa');
+            const isProfesional = pack.name.toLowerCase().includes('profesional');
+            const isIcono = pack.name.toLowerCase().includes('icono');
 
             const baseStyle = isPromesa
               ? 'bg-gradient-to-br from-[#b87333] via-[#da8a67] to-[#8b4513]' // Cobre mejorado
@@ -66,7 +66,7 @@ const SurprisePacks: React.FC = () => {
             return (
               <div 
                 key={pack.id} 
-                className={`relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 ${baseStyle}`}
+                className={`relative overflow-hidden rounded-xl transition-transform transform hover:scale-105 ${baseStyle} h-full flex flex-col`}
               >
                 {isPromesa && (
                   <>
@@ -111,61 +111,24 @@ const SurprisePacks: React.FC = () => {
                   </>
                 )}
                 
-                <div className="p-6 md:p-8 relative">
-                  <h3 className={`text-2xl font-bold mb-3 ${isPromesa ? 'text-[#cd7f32] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]' : isProfesional ? 'text-black drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)]' : 'text-[#daa520] drop-shadow-[0_2px_2px_rgba(255,255,255,0.3)]'}`}>
-                    {pack.name}
-                  </h3>
-                  <div className="flex flex-col mb-6">
+                <div className="p-6 md:p-8 relative flex flex-col flex-grow">
+                  <div className="text-center mb-6">
+                    <h3 className={`text-2xl md:text-3xl font-bold uppercase tracking-tight ${isPromesa ? 'text-[#cd7f32]' : isProfesional ? 'text-black' : 'text-[#daa520]'}`}>
+                      {isPromesa ? 'PROMESA' : isProfesional ? 'PROFESIONAL' : 'ICONO'}
+                    </h3>
+                  </div>
+                  <div className="flex items-end mb-6">
                     <span className={`text-3xl md:text-4xl font-bold ${isIcono ? 'text-[#daa520]' : isProfesional ? 'text-black' : 'text-white'} drop-shadow-[0_2px_2px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
                       {pack.price.toFixed(2)} €
                     </span>
-                    {pack.jerseyCount === 1 ? null : (
-                      <div className="mt-1">
-                        <span className={`text-sm font-medium ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
-                          {(pack.price / pack.jerseyCount).toFixed(2)} € por unidad
-                        </span>
-                        {pack.type === 'promesa' && pack.jerseyCount === 5 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 15€!</span>
-                        )}
-                        {pack.type === 'profesional' && pack.jerseyCount === 5 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 12.50€!</span>
-                        )}
-                        {pack.type === 'icono' && pack.jerseyCount === 5 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 25€!</span>
-                        )}
-                        {pack.type === 'promesa' && pack.jerseyCount === 10 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 50€!</span>
-                        )}
-                        {pack.type === 'profesional' && pack.jerseyCount === 10 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 50€!</span>
-                        )}
-                        {pack.type === 'icono' && pack.jerseyCount === 10 && (
-                          <span className="ml-2 text-sm font-bold text-green-500">¡Ahorras 80€!</span>
-                        )}
-                      </div>
-                    )}
                   </div>
                   <p className={`mb-6 ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
                     {pack.description}
                   </p>
                 
-                <div className={`mb-6 ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
-                  <h4 className="font-bold text-lg mb-2">Contenido del pack:</h4>
-                  <div className="whitespace-pre-line text-base">
+                <div className={`mb-6 ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}] text-sm whitespace-pre-line flex-grow`}>
                     {pack.specifications}
                   </div>
-                </div>
-                
-                <ul className="space-y-3 mb-8">
-                    <li className={`flex items-center ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
-                      <span className={`mr-2 ${isPromesa ? 'text-[#cd7f32]' : isProfesional ? 'text-black' : 'text-[#4a90e2]'}`}>✓</span>
-                      Envío rápido y seguro
-                    </li>
-                    <li className={`flex items-center ${isIcono ? 'text-gray-800' : isProfesional ? 'text-black' : 'text-gray-300'} drop-shadow-[0_1px_1px_${isProfesional ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}]`}>
-                      <span className={`mr-2 ${isPromesa ? 'text-[#cd7f32]' : isProfesional ? 'text-black' : 'text-[#4a90e2]'}`}>✓</span>
-                      Selección aleatoria
-                    </li>
-                  </ul>
                 
                 <button 
                   type="button"
@@ -185,7 +148,7 @@ const SurprisePacks: React.FC = () => {
                     handleAddToCart(pack);
                   }}
                   disabled={loading === pack.id}
-                  className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} ${
+                  className={`w-full py-3 px-6 rounded-md font-bold transition-all transform hover:scale-105 mt-auto ${loading === pack.id ? 'opacity-50 cursor-not-allowed' : ''} ${
                     isPromesa
                       ? 'bg-gradient-to-r from-[#cd7f32] to-[#b87333] text-white shadow-md hover:shadow-lg'
                       : isProfesional

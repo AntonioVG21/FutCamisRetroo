@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
       />
 
       {/* Content */}
-      <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-10">
+      <div className="w-full px-4 h-full flex flex-col justify-center items-center relative z-10">
         <div className={`text-center transition-all duration-1000 transform ${
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>

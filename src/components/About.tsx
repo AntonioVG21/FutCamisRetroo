@@ -5,7 +5,7 @@ import { IoFootball } from 'react-icons/io5';
 const AboutSection: React.FC = () => {
   return (
     <section className="py-16 bg-gray-900">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

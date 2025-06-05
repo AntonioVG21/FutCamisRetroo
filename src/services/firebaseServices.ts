@@ -10,6 +10,8 @@ import {
   query, 
   where, 
   orderBy, 
+  limit,
+  Timestamp,
   setDoc
 } from 'firebase/firestore';
 
@@ -46,19 +48,8 @@ interface CustomerData {
     laLiga: boolean;
     serieA: boolean;
     bundesliga: boolean;
+    ligue1: boolean;
   };
-}
-
-// Interfaz para detalles de pago
-interface PaymentDetails {
-  method: string;
-  status: string;
-  transactionId?: string;
-  paypalOrderId?: string;
-  bizumReference?: string;
-  amount?: number;
-  currency?: string;
-  timestamp?: Date;
 }
 
 interface Order {
@@ -219,30 +210,8 @@ export const orderServices = {
   updateOrderStatus: async (id: string, status: Order['status']) => {
     try {
       const orderRef = doc(db, 'orders', id);
-      const maxRetries = 3;
-      let retryCount = 0;
-      
-      const executeWithRetry = async () => {
-        try {
-          await updateDoc(orderRef, { status });
-          console.log(`Estado del pedido ${id} actualizado a ${status} correctamente`);
-          return { id, status };
-        } catch (error) {
-          retryCount++;
-          console.error(`Error al actualizar estado (intento ${retryCount}/${maxRetries}):`, error);
-          
-          if (retryCount < maxRetries) {
-            const delay = Math.pow(2, retryCount) * 500; // Backoff exponencial
-            console.log(`Reintentando en ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return executeWithRetry();
-          } else {
-            throw error;
-          }
-        }
-      };
-      
-      return await executeWithRetry();
+      await updateDoc(orderRef, { status });
+      return { id, status };
     } catch (error) {
       console.error('Error al actualizar estado del pedido:', error);
       throw error;
@@ -290,33 +259,11 @@ export const orderServices = {
   },
 
   // Actualizar los detalles de pago de un pedido
-  updateOrderPaymentDetails: async (id: string, paymentDetails: PaymentDetails) => {
+  updateOrderPaymentDetails: async (id: string, paymentDetails: any) => {
     try {
       const orderRef = doc(db, 'orders', id);
-      const maxRetries = 3;
-      let retryCount = 0;
-      
-      const executeWithRetry = async () => {
-        try {
-          await updateDoc(orderRef, { paymentDetails });
-          console.log(`Detalles de pago del pedido ${id} actualizados correctamente`);
-          return { id, paymentDetails };
-        } catch (error) {
-          retryCount++;
-          console.error(`Error al actualizar detalles de pago (intento ${retryCount}/${maxRetries}):`, error);
-          
-          if (retryCount < maxRetries) {
-            const delay = Math.pow(2, retryCount) * 500; // Backoff exponencial
-            console.log(`Reintentando en ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return executeWithRetry();
-          } else {
-            throw error;
-          }
-        }
-      };
-      
-      return await executeWithRetry();
+      await updateDoc(orderRef, { paymentDetails });
+      return { id, paymentDetails };
     } catch (error) {
       console.error('Error al actualizar detalles de pago del pedido:', error);
       throw error;

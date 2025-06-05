@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { orderServices } from '../services/firebaseServices';
 import { FaCheck, FaWhatsapp } from 'react-icons/fa';
 import { Order } from '../types/Order';
 
-// Definir una interfaz para los detalles del pago
-interface PaymentDetails {
-  id?: string;
-  status: string;
-  paymentMethod: string;
-  reference?: string;
-  timestamp?: Date;
-  [key: string]: unknown; // Para otros campos que pueda tener
-}
-
 interface BizumCheckoutProps {
   amount: number;
   orderData: Order;
-  onSuccess: (details: PaymentDetails) => void;
+  onSuccess: (details: any) => void;
   onCancel: () => void;
 }
 
@@ -38,57 +28,29 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
       console.log('OrderData recibido:', orderData);
       console.log('ID de la orden:', orderData.id);
       
-      // Preparar los datos de pago
+      // Actualizar el estado de la orden en Firestore
+      console.log('Actualizando estado de la orden a processing...');
+      await orderServices.updateOrderStatus(orderData.id, 'processing');
+      
+      console.log('Actualizando detalles de pago...');
       const paymentDetails = {
         paymentMethod: 'bizum',
         reference: reference,
         status: 'processing',
         timestamp: new Date()
       };
+      console.log('Detalles de pago a guardar:', paymentDetails);
       
-      // Actualizar todo en una sola operación para reducir errores de red
-      try {
-        // Actualizar el estado de la orden en Firestore
-        console.log('Actualizando estado de la orden a processing...');
-        await orderServices.updateOrderStatus(orderData.id, 'processing');
-        
-        console.log('Actualizando detalles de pago...');
-        console.log('Detalles de pago a guardar:', paymentDetails);
-        
-        await orderServices.updateOrderPaymentDetails(orderData.id, paymentDetails);
-        
-        console.log('Pago confirmado exitosamente');
-        toast.success('¡Pago confirmado! Verificaremos tu transferencia.');
-        
-        console.log('Llamando a onSuccess...');
-        onSuccess({
-          paymentMethod: 'bizum',
-          reference: reference
-        });
-      } catch (firebaseError) {
-        console.error('Error específico de Firebase:', firebaseError);
-        // Intentar nuevamente con un pequeño retraso
-        setTimeout(async () => {
-          try {
-            await orderServices.updateOrderStatus(orderData.id, 'processing');
-            await orderServices.updateOrderPaymentDetails(orderData.id, paymentDetails);
-            
-            console.log('Pago confirmado exitosamente en segundo intento');
-            toast.success('¡Pago confirmado! Verificaremos tu transferencia.');
-            
-            onSuccess({
-              paymentMethod: 'bizum',
-              reference: reference
-            });
-          } catch (retryError) {
-            console.error('Error en segundo intento:', retryError);
-            toast.error('Hubo un error al confirmar tu pago. Por favor, inténtalo de nuevo.');
-          } finally {
-            setIsConfirming(false);
-          }
-        }, 1500); // Esperar 1.5 segundos antes de reintentar
-        return; // Salir de la función principal
-      }
+      await orderServices.updateOrderPaymentDetails(orderData.id, paymentDetails);
+      
+      console.log('Pago confirmado exitosamente');
+      toast.success('¡Pago confirmado! Verificaremos tu transferencia.');
+      
+      console.log('Llamando a onSuccess...');
+      onSuccess({
+        paymentMethod: 'bizum',
+        reference: reference
+      });
     } catch (error) {
       console.error('Error al confirmar el pago por Bizum:', error);
       toast.error('Hubo un error al confirmar tu pago. Por favor, inténtalo de nuevo.');
