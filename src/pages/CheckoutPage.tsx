@@ -4,9 +4,8 @@ import toast from 'react-hot-toast';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FiPackage } from 'react-icons/fi';
-import { FaPaypal, FaMobileAlt } from 'react-icons/fa';
+import { FaMobileAlt } from 'react-icons/fa';
 import { orderServices } from '../services/firebaseServices';
-import PayPalCheckout from '../components/PayPalCheckout';
 import BizumCheckout from '../components/BizumCheckout';
 import { discountServices } from '../services/discountServices';
 
@@ -30,7 +29,6 @@ interface CustomerData {
 
 const CheckoutPage: React.FC = () => {
   const { items, total, clearCart, updateNotes, updateSpecifications } = useCartStore();
-  const [showPayPal, setShowPayPal] = useState(false);
   const [showBizum, setShowBizum] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [discountCode, setDiscountCode] = useState('');
@@ -115,7 +113,7 @@ const CheckoutPage: React.FC = () => {
   // Calcular el total con descuento
   const totalWithDiscount = total - discountAmount;
 
-  const handlePaymentMethod = async (method: 'paypal' | 'bizum') => {
+  const handlePaymentMethod = async (method: 'bizum') => {
     console.log(`Método de pago seleccionado: ${method}`);
     try {
       // Desplazar la página hacia arriba
@@ -130,8 +128,8 @@ const CheckoutPage: React.FC = () => {
       }
       
       // Verificar que el método de pago sea válido
-      if (method !== 'paypal' && method !== 'bizum') {
-        toast.error('Método de pago no válido. Por favor, selecciona PayPal o Bizum.');
+      if (method !== 'bizum') {
+        toast.error('Método de pago no válido. Por favor, selecciona Bizum.');
         return;
       }
       
@@ -170,28 +168,6 @@ const CheckoutPage: React.FC = () => {
       
       console.log('Datos del pedido preparados:', orderData);
       
-      // Si el método de pago es PayPal, mostrar el componente de PayPal
-      if (method === 'paypal') {
-        console.log('Procesando pago con PayPal...');
-        // Guardar la orden en Firestore usando el servicio
-        const result = await orderServices.createOrder(orderData);
-        console.log('Orden guardada con ID:', result.id);
-        
-        // Guardar el ID de la orden y mostrar el componente de PayPal
-        setOrderId(result.id);
-        setShowPayPal(true);
-        setShowBizum(false);
-        console.log('Estado showPayPal actualizado a:', true);
-        console.log('Estado orderId actualizado a:', result.id);
-
-        // Si se aplicó un descuento, marcarlo como canjeado
-        if (discountApplied) {
-          await discountServices.redeemDiscount(discountCode);
-        }
-        
-        return;
-      }
-      
       // Si el método de pago es Bizum, mostrar el componente de Bizum
       if (method === 'bizum') {
         console.log('Procesando pago con Bizum...');
@@ -202,7 +178,6 @@ const CheckoutPage: React.FC = () => {
         // Guardar el ID de la orden y mostrar el componente de Bizum
         setOrderId(result.id);
         setShowBizum(true);
-        setShowPayPal(false);
         console.log('Estado showBizum actualizado a:', true);
         console.log('Estado orderId actualizado a:', result.id);
 
@@ -510,26 +485,7 @@ const CheckoutPage: React.FC = () => {
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold text-white mb-6">Método de Pago</h2>
               
-              {showPayPal && orderId ? (
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-white mb-4">Completa tu pago con PayPal</h3>
-                  <PayPalCheckout 
-                    amount={total} 
-                    orderData={{ id: orderId, status: 'pending' }} 
-                    onSuccess={(details) => {
-                      console.log('Pago completado con PayPal:', details);
-                      handleOrderSuccess();
-                    }} 
-                    currency="EUR"
-                  />
-                  <button
-                    onClick={() => setShowPayPal(false)}
-                    className="mt-4 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                  >
-                    Cancelar y elegir otro método de pago
-                  </button>
-                </div>
-              ) : showBizum && orderId ? (
+              {showBizum && orderId ? (
                 <div className="mb-6">
                   <BizumCheckout 
                     amount={total} 
@@ -552,14 +508,7 @@ const CheckoutPage: React.FC = () => {
                   />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <button
-                    onClick={() => handlePaymentMethod('paypal')}
-                    className="flex items-center justify-center space-x-2 w-full py-4 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200"
-                  >
-                    <FaPaypal className="h-5 w-5 mr-2" />
-                    <span className="text-lg font-semibold">Pagar con PayPal</span>
-                  </button>
+                <div className="grid grid-cols-1 gap-4">
                   <button
                     onClick={() => handlePaymentMethod('bizum')}
                     className="flex items-center justify-center space-x-2 w-full py-4 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"

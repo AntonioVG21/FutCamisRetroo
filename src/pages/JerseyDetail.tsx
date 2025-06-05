@@ -10,6 +10,7 @@ import { AiOutlineNumber } from 'react-icons/ai';
 import { BsTypeH1 } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { jerseys } from '../data/jerseys';
+import toast from 'react-hot-toast';
 
 const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
@@ -54,7 +55,7 @@ const JerseyDetail: React.FC = () => {
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert('Por favor, selecciona una talla');
+      toast.error('¡Debes seleccionar una talla antes de añadir al carrito!');
       return;
     }
 
@@ -78,6 +79,8 @@ const JerseyDetail: React.FC = () => {
       image: jersey.image,
       customization
     });
+    
+    toast.success('Producto añadido al carrito');
   };
 
   return (

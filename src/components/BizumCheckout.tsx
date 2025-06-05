@@ -19,7 +19,7 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
 }) => {
   const [isConfirming, setIsConfirming] = useState(false);
   const [reference] = useState(`FutCamisRetros-${orderData.id.substring(0, 8)}`);
-  const bizumPhone = '666123456'; // Número de teléfono para Bizum (reemplazar con el número real)
+  const bizumPhone = '640660362'; // Número de teléfono para Bizum (reemplazar con el número real)
   
   const handleConfirmPayment = async () => {
     console.log('Iniciando confirmación de pago Bizum');

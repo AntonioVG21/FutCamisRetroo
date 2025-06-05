@@ -1,8 +1,7 @@
 import React from 'react';
-import { FiShoppingCart, FiHeart } from 'react-icons/fi';
+import { FiHeart } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { Jersey } from '../types';
-import { useCartStore } from '../store/cartStore';
 import { useFavoritesStore } from '../store/favoritesStore';
 
 interface JerseyCardProps {
@@ -10,19 +9,8 @@ interface JerseyCardProps {
 }
 
 const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
-  const addItem = useCartStore((state) => state.addItem);
   const { addFavorite, removeFavorite, isFavorite } = useFavoritesStore();
   const navigate = useNavigate();
-
-  const handleAddToCart = () => {
-    addItem({
-      id: jersey.id,
-      name: jersey.name,
-      price: jersey.price,
-      image: jersey.image,
-      quantity: 1
-    });
-  };
 
   return (
     <div 
@@ -105,15 +93,9 @@ const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
             )}
           </div>
           
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAddToCart();
-            }}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full p-2 transition-colors"
-          >
-            <FiShoppingCart className="h-4 w-4" />
-          </button>
+          <div className="text-xs text-gray-400 italic">
+            Ver detalles
+          </div>
         </div>
       </div>
     </div>
