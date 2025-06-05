@@ -101,7 +101,7 @@ const LeaguePage: React.FC = () => {
 
         {filteredJerseys.length === 0 && (
           <div className="text-center text-gray-400 py-12">
-            <p className="text-xl">No hay camisetas disponibles con los filtros seleccionados.</p>
+            <p className="text-xl">No hay camisetas disponibles con los filtros seleccionados</p>
           </div>
         )}
       </main>
