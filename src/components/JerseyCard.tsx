@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiHeart } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { Jersey } from '../types';
@@ -11,6 +11,20 @@ interface JerseyCardProps {
 const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
   const { addFavorite, removeFavorite, isFavorite } = useFavoritesStore();
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.target as HTMLImageElement;
+    if (!imageError) {
+      setImageError(true);
+      img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666" stroke="%23fff" stroke-width="0.5"><path d="M20 4L16 4 14 2 10 2 8 4 4 4 2 8 4 22 20 22 22 8 20 4zM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" /></svg>';
+    }
+  };
 
   return (
     <div 
@@ -18,17 +32,25 @@ const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
       onClick={() => navigate(`/jersey/${jersey.id}`)}>
       
       {/* Image container */}
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-800">
+        {/* Loading placeholder */}
+        {!imageLoaded && !imageError && (
+          <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-gray-600 border-t-yellow-500 rounded-full animate-spin"></div>
+          </div>
+        )}
+        
         <img 
           src={jersey.image} 
           alt={jersey.name} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          onError={(e) => {
-            const img = e.target as HTMLImageElement;
-            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666" stroke="%23fff" stroke-width="0.5"><path d="M20 4L16 4 14 2 10 2 8 4 4 4 2 8 4 22 20 22 22 8 20 4zM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" /></svg>';
-            img.onerror = null; // Prevent infinite loop if placeholder also fails
-          }}
+          className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
           loading="lazy"
+          decoding="async"
+          fetchPriority="low"
         />
         
         {/* Tags */}
@@ -65,7 +87,9 @@ const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
                 });
               }
             }}
-            className={`rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity ${isFavorite(jersey.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-800 hover:bg-gray-700'}`}
+            className={`rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity ${
+              isFavorite(jersey.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-800 hover:bg-gray-700'
+            }`}
           >
             <FiHeart className="h-4 w-4" />
           </button>
