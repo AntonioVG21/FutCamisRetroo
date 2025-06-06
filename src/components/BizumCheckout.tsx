@@ -81,7 +81,32 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
           </div>
           <div className="flex justify-between">
             <span className="text-gray-300">Referencia:</span>
-            <span className="text-white font-medium">{reference}</span>
+            <div className="flex items-center space-x-2">
+              <span className="text-white font-medium">{reference}</span>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(reference);
+                  toast.success('Referencia copiada');
+                }}
+                className="p-1.5 rounded-md bg-gray-600 hover:bg-gray-500 text-yellow-500 hover:text-yellow-400 transition-colors duration-200"
+                title="Copiar referencia"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
