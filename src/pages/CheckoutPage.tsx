@@ -117,22 +117,9 @@ const CheckoutPage: React.FC = () => {
     console.log(`Método de pago seleccionado: ${method}`);
     try {
       if (!validateForm()) {
-        // Solo hacer scroll hacia arriba si hay errores en el formulario
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
         toast.error('Por favor, completa todos los campos obligatorios.');
         return;
       }
-      
-      // Verificar que el método de pago sea válido
-      if (method !== 'bizum') {
-        toast.error('Método de pago no válido. Por favor, selecciona Bizum.');
-        return;
-      }
-      
-      console.log('Formulario validado correctamente');
       
       // Preparar los datos del pedido
       const orderData = {
