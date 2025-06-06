@@ -116,13 +116,12 @@ const CheckoutPage: React.FC = () => {
   const handlePaymentMethod = async (method: 'bizum') => {
     console.log(`Método de pago seleccionado: ${method}`);
     try {
-      // Desplazar la página hacia arriba
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-      
       if (!validateForm()) {
+        // Solo hacer scroll hacia arriba si hay errores en el formulario
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
         toast.error('Por favor, completa todos los campos obligatorios.');
         return;
       }
