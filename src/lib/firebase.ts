@@ -7,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyBqJ6K4nj9mQqY_m7kHQGOoYxqKwvZuqt8",
+  authDomain: "tiendaoficial-b1a87.firebaseapp.com",
+  projectId: "tiendaoficial-b1a87",
+  storageBucket: "tiendaoficial-b1a87.appspot.com",
+  messagingSenderId: "1098332036175",
+  appId: "1:1098332036175:web:c3a04b7d8e8e9d7c4e4e4e",
+  measurementId: "G-XXXXXXXXXX"
 };
 
 console.log('Inicializando Firebase con configuración:', firebaseConfig);
@@ -40,39 +40,17 @@ try {
   });
   console.log('Firestore inicializado correctamente con configuración optimizada');
   
-  // Comentamos la persistencia temporalmente para resolver problemas de conexión
-  // enableIndexedDbPersistence(db)
-  //   .then(() => {
-  //     console.log('Persistencia de Firestore habilitada correctamente');
-  //   })
-  //   .catch((err) => {
-  //     if (err.code === 'failed-precondition') {
-  //       console.warn('La persistencia de Firestore no pudo ser habilitada porque múltiples pestañas están abiertas');
-  //     } else if (err.code === 'unimplemented') {
-  //       console.warn('El navegador actual no soporta todas las características necesarias para la persistencia');
-  //     } else {
-  //       console.error('Error al habilitar persistencia:', err);
-  //     }
-  //   });
-
-  console.log('Inicializando Storage...');
   storage = getStorage(app);
-  console.log('Storage inicializado correctamente');
-
-  console.log('Inicializando Auth...');
   auth = getAuth(app);
-  console.log('Auth inicializado correctamente');
-
-  // Inicializar analytics solo en el navegador (no en SSR)
+  
+  // Solo inicializar Analytics si estamos en un navegador
   if (typeof window !== 'undefined') {
-    console.log('Inicializando Analytics...');
     analytics = getAnalytics(app);
-    console.log('Analytics inicializado correctamente');
   }
+
 } catch (error) {
   console.error('Error al inicializar Firebase:', error);
 }
 
-// Export the Firebase services
-export { db, storage, auth, analytics };
+export { app, db, storage, auth, analytics };
 export default app;
