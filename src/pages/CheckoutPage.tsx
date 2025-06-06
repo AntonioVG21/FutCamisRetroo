@@ -114,8 +114,11 @@ const CheckoutPage: React.FC = () => {
   const totalWithDiscount = total - discountAmount;
 
   // En la función handlePaymentMethod, simplificar la lógica:
-  const handlePaymentMethod = async (method: 'bizum') => {
-  console.log(`Método de pago seleccionado: ${method}`);
+  // Importar el nuevo componente al inicio del archivo
+  import OrderConfirmation from '../components/OrderConfirmation';
+
+  const handlePaymentMethod = async (method: 'order') => {
+  console.log(`Procesando pedido...`);
   try {
     if (!validateForm()) {
       toast.error('Por favor, completa todos los campos obligatorios.');
@@ -148,58 +151,36 @@ const CheckoutPage: React.FC = () => {
         code: discountCode,
         amount: discountAmount
       } : null,
-      paymentMethod: method,
       createdAt: new Date(),
       status: 'pending' as const
     };
     
-    if (method === 'bizum') {
-      console.log('Procesando pago con Bizum...');
-      
-      // Generar ID único para el pedido
-      const tempOrderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
-      // Guardar temporalmente en localStorage como respaldo
-      localStorage.setItem('pendingOrder', JSON.stringify({
-        ...orderData,
-        id: tempOrderId,
-        timestamp: new Date().toISOString()
-      }));
-      
-      // Intentar guardar en Firebase, pero no bloquear si falla
+    console.log('Datos del pedido preparados:', orderData);
+    
+    // Mostrar el componente de confirmación
+    setShowBizum(true); // Reutilizamos esta variable para mostrar el nuevo componente
+    setOrderId(`FC${Date.now().toString().slice(-6)}`);
+    
+    // Si se aplicó un descuento, intentar marcarlo como canjeado
+    if (discountApplied) {
       try {
-        const result = await orderServices.createOrder(orderData);
-        setOrderId(result.id);
-        console.log('Orden guardada en Firebase con ID:', result.id);
-      } catch (firebaseError) {
-        console.warn('Error al guardar en Firebase, usando ID temporal:', firebaseError);
-        setOrderId(tempOrderId);
+        await discountServices.redeemDiscount(discountCode);
+      } catch (discountError) {
+        console.warn('Error al canjear descuento:', discountError);
       }
-      
-      setShowBizum(true);
-      
-      // Si se aplicó un descuento, intentar marcarlo como canjeado
-      if (discountApplied) {
-        try {
-          await discountServices.redeemDiscount(discountCode);
-        } catch (discountError) {
-          console.warn('Error al canjear descuento:', discountError);
-        }
-      }
-      
-      // Scroll automático al componente Bizum
-      setTimeout(() => {
-        const bizumElement = document.getElementById('bizum-checkout');
-        if (bizumElement) {
-          bizumElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
-      
-      return;
     }
+    
+    // Scroll automático al componente
+    setTimeout(() => {
+      const orderElement = document.getElementById('order-confirmation');
+      if (orderElement) {
+        orderElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+    
   } catch (error) {
-    console.error('Error al procesar el pago:', error);
-    toast.error('Hubo un error al procesar tu pago. Por favor, inténtalo de nuevo.');
+    console.error('Error al procesar el pedido:', error);
+    toast.error('Hubo un error al procesar tu pedido. Por favor, inténtalo de nuevo.');
   }
 };
   
@@ -537,3 +518,53 @@ const CheckoutPage: React.FC = () => {
 };
 
 export default CheckoutPage;
+
+// En la sección de métodos de pago, reemplazar el contenido:
+{showBizum && orderId ? (
+  <div className="mb-6">
+    <OrderConfirmation 
+      orderData={{
+        items: items.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          specifications: item.specifications || '',
+          unwantedKits: item.notes || ''
+        }))
+      }}
+      customerData={customerData}
+      total={totalWithDiscount}
+      onSuccess={() => {
+        console.log('Pedido completado exitosamente');
+        handleOrderSuccess();
+      }}
+      onCancel={() => {
+        console.log('Cancelando pedido');
+        setShowBizum(false);
+      }}
+    />
+  </div>
+) : (
+  <div className="grid grid-cols-1 gap-4">
+    <button
+      onClick={() => handlePaymentMethod('order')}
+      className="flex items-center justify-center space-x-2 w-full py-4 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+    >
+      <span className="text-2xl">📋</span>
+      <span className="text-lg font-semibold">Realizar Pedido</span>
+    </button>
+    
+    <div className="bg-gray-700 p-4 rounded-lg">
+      <h4 className="text-white font-semibold mb-2 flex items-center">
+        <span className="mr-2">ℹ️</span> Cómo funciona:
+      </h4>
+      <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside">
+        <li>Confirma tu pedido con tus datos</li>
+        <li>Te enviaremos los detalles por WhatsApp o Email</li>
+        <li>Te responderemos con la confirmación y forma de pago</li>
+        <li>Preparamos y enviamos tu pedido</li>
+      </ul>
+    </div>
+  </div>
+)}
