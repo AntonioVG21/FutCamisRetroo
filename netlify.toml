@@ -1,9 +1,9 @@
 [build]
-  command = "npm run build"
   publish = "dist"
+  command = "npm run build"
 
-[context.production.environment]
-  VITE_NODE_ENV = "production"
+[build.environment]
+  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/*"
@@ -11,7 +11,22 @@
   status = 200
 
 [[headers]]
-  for = "/manifest.webmanifest"
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/manifest.json"
   [headers.values]
     Content-Type = "application/manifest+json"
 
@@ -19,3 +34,6 @@
   for = "/assets/*"
   [headers.values]
     cache-control = "public, max-age=31536000, immutable"
+
+[context.production.environment]
+  VITE_NODE_ENV = "production"
