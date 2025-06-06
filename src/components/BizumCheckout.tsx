@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaWhatsapp, FaCopy } from 'react-icons/fa';
-import { Order } from '../types/Order';
+import { FaWhatsapp, FaCopy, FaCheckCircle } from 'react-icons/fa';
 
 interface BizumCheckoutProps {
   amount: number;
@@ -16,10 +15,19 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   onSuccess,
   onCancel
 }) => {
-  const [isConfirming, setIsConfirming] = useState(false);
-  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [step, setStep] = useState<'instructions' | 'confirming' | 'completed'>('instructions');
+  const [countdown, setCountdown] = useState(0);
+  
   const reference = `FutCamisRetros-${orderData.id.substring(0, 8)}`;
   const bizumPhone = '640660362';
+  
+  // Auto-scroll al componente cuando se monta
+  useEffect(() => {
+    const element = document.getElementById('bizum-checkout');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, []);
   
   const copyReference = async () => {
     try {
@@ -37,65 +45,93 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
     }
   };
   
-  const handleConfirmPayment = async () => {
-    setIsConfirming(true);
+  const handleConfirmPayment = () => {
+    setStep('confirming');
+    setCountdown(3);
     
-    // Simular un pequeño delay para mejor UX
-    setTimeout(() => {
-      setPaymentConfirmed(true);
-      setIsConfirming(false);
-      
-      const paymentDetails = {
-        paymentMethod: 'bizum',
-        reference: reference,
-        status: 'processing',
-        timestamp: new Date(),
-        amount: amount
-      };
-      
-      toast.success('¡Pago registrado! Realiza la transferencia Bizum y notifícanos por WhatsApp.');
-      onSuccess(paymentDetails);
-    }, 1500);
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setStep('completed');
+          
+          const paymentDetails = {
+            paymentMethod: 'bizum',
+            reference: reference,
+            status: 'processing',
+            timestamp: new Date().toISOString(),
+            amount: amount,
+            phone: bizumPhone
+          };
+          
+          // Guardar en localStorage como respaldo
+          localStorage.setItem('lastBizumPayment', JSON.stringify({
+            ...paymentDetails,
+            orderId: orderData.id
+          }));
+          
+          toast.success('¡Pago registrado! No olvides realizar la transferencia Bizum.');
+          onSuccess(paymentDetails);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   const openWhatsApp = () => {
-    const message = `Hola! He realizado un pago por Bizum:\n\n` +
-                   `💰 Importe: ${amount.toFixed(2)}€\n` +
-                   `📱 Referencia: ${reference}\n` +
-                   `📞 Teléfono Bizum: ${bizumPhone}\n\n` +
-                   `Por favor, confirma la recepción del pago. ¡Gracias!`;
+    const message = `🛒 *NUEVO PEDIDO - PAGO BIZUM*\n\n` +
+                   `💰 *Importe:* ${amount.toFixed(2)}€\n` +
+                   `📱 *Referencia:* ${reference}\n` +
+                   `📞 *Teléfono Bizum:* ${bizumPhone}\n` +
+                   `🆔 *ID Pedido:* ${orderData.id}\n\n` +
+                   `✅ He realizado el pago por Bizum.\n` +
+                   `Por favor, confirma la recepción del pago.\n\n` +
+                   `¡Gracias por tu compra! 🙌`;
     
     const whatsappUrl = `https://wa.me/34${bizumPhone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    
+    // Abrir en nueva ventana con configuración específica
+    const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer,width=400,height=600');
+    
+    if (!newWindow) {
+      // Fallback si el popup es bloqueado
+      window.location.href = whatsappUrl;
+    }
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md mx-auto">
+    <div id="bizum-checkout" className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-2xl max-w-lg mx-auto border border-gray-700">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-white mb-2">💳 Pago con Bizum</h3>
-        <p className="text-gray-300">Sigue estos pasos para completar tu pago</p>
+        <div className="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span className="text-2xl">💳</span>
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-2">Pago con Bizum</h3>
+        <p className="text-gray-300">Sigue estos pasos para completar tu compra</p>
       </div>
       
-      <div className="bg-gray-700 p-4 rounded-lg mb-6 space-y-3">
+      {/* Información del pago */}
+      <div className="bg-gray-700 p-5 rounded-xl mb-6 space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-gray-300 font-medium">Importe:</span>
-          <span className="text-yellow-400 font-bold text-xl">{amount.toFixed(2)} €</span>
+          <span className="text-yellow-400 font-bold text-2xl">{amount.toFixed(2)} €</span>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-gray-300 font-medium">Teléfono Bizum:</span>
-          <span className="text-white font-bold">{bizumPhone}</span>
+          <span className="text-white font-bold text-lg">{bizumPhone}</span>
         </div>
         
-        <div className="border-t border-gray-600 pt-3">
-          <div className="flex justify-between items-center mb-2">
+        <div className="border-t border-gray-600 pt-4">
+          <div className="flex justify-between items-center mb-3">
             <span className="text-gray-300 font-medium">Referencia:</span>
+            <span className="text-xs text-gray-400">¡Importante incluirla!</span>
           </div>
-          <div className="flex items-center space-x-2 bg-gray-600 p-3 rounded">
-            <span className="text-white font-mono text-sm flex-1">{reference}</span>
+          <div className="flex items-center space-x-3 bg-gray-600 p-4 rounded-lg">
+            <span className="text-white font-mono text-sm flex-1 select-all">{reference}</span>
             <button
               onClick={copyReference}
-              className="p-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition-colors duration-200 flex items-center justify-center"
+              className="p-3 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg transition-all duration-200 flex items-center justify-center hover:scale-105"
               title="Copiar referencia"
             >
               <FaCopy className="h-4 w-4" />
@@ -104,55 +140,71 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
         </div>
       </div>
 
-      <div className="bg-blue-900 border border-blue-700 p-4 rounded-lg mb-6">
-        <h4 className="text-blue-200 font-semibold mb-2">📋 Instrucciones:</h4>
-        <ol className="text-blue-100 text-sm space-y-1 list-decimal list-inside">
-          <li>Abre tu app de Bizum</li>
-          <li>Envía <strong>{amount.toFixed(2)}€</strong> al <strong>{bizumPhone}</strong></li>
-          <li>Usa la referencia: <strong>{reference}</strong></li>
-          <li>Confirma el pago aquí abajo</li>
-          <li>Notifícanos por WhatsApp</li>
-        </ol>
-      </div>
-
-      <div className="space-y-3">
-        {!paymentConfirmed ? (
-          <button
-            onClick={handleConfirmPayment}
-            disabled={isConfirming}
-            className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-300 text-black font-bold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center"
-          >
-            {isConfirming ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
-                Procesando...
-              </>
-            ) : (
-              '✅ He realizado el pago Bizum'
-            )}
-          </button>
-        ) : (
-          <div className="bg-green-600 text-white p-4 rounded-lg text-center">
-            <p className="font-semibold">✅ ¡Pago registrado!</p>
-            <p className="text-sm">Ahora notifícanos por WhatsApp</p>
+      {/* Instrucciones paso a paso */}
+      {step === 'instructions' && (
+        <>
+          <div className="bg-blue-900 border border-blue-600 p-5 rounded-xl mb-6">
+            <h4 className="text-blue-200 font-semibold mb-3 flex items-center">
+              <span className="mr-2">📋</span> Instrucciones:
+            </h4>
+            <ol className="text-blue-100 text-sm space-y-2 list-decimal list-inside">
+              <li>Abre tu app de <strong>Bizum</strong></li>
+              <li>Selecciona <strong>"Enviar dinero"</strong></li>
+              <li>Introduce el teléfono: <strong>{bizumPhone}</strong></li>
+              <li>Importe: <strong>{amount.toFixed(2)}€</strong></li>
+              <li>En concepto, escribe: <strong>{reference}</strong></li>
+              <li>Confirma el envío en tu app</li>
+              <li>Pulsa el botón de abajo cuando hayas enviado el dinero</li>
+            </ol>
           </div>
-        )}
 
-        <button
-          onClick={openWhatsApp}
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-        >
-          <FaWhatsapp className="text-xl" />
-          <span>Notificar por WhatsApp</span>
-        </button>
+          <div className="space-y-4">
+            <button
+              onClick={handleConfirmPayment}
+              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 hover:scale-105 shadow-lg"
+            >
+              <FaCheckCircle className="text-xl" />
+              <span>✅ He enviado el Bizum</span>
+            </button>
+          </div>
+        </>
+      )}
 
-        <button
-          onClick={onCancel}
-          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200"
-        >
-          ← Volver a métodos de pago
-        </button>
-      </div>
+      {/* Estado de confirmación */}
+      {step === 'confirming' && (
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-yellow-500 mx-auto mb-4"></div>
+          <p className="text-white font-semibold text-lg">Registrando tu pago...</p>
+          <p className="text-gray-300 text-sm">Procesando en {countdown} segundos</p>
+        </div>
+      )}
+
+      {/* Estado completado */}
+      {step === 'completed' && (
+        <>
+          <div className="bg-green-600 text-white p-5 rounded-xl text-center mb-6">
+            <FaCheckCircle className="text-4xl mx-auto mb-3" />
+            <p className="font-bold text-lg">¡Pago registrado correctamente!</p>
+            <p className="text-sm opacity-90">Ahora notifícanos por WhatsApp para confirmar</p>
+          </div>
+
+          <button
+            onClick={openWhatsApp}
+            className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 hover:scale-105 shadow-lg"
+          >
+            <FaWhatsapp className="text-2xl" />
+            <span>📱 Notificar por WhatsApp</span>
+          </button>
+        </>
+      )}
+
+      {/* Botón cancelar */}
+      <button
+        onClick={onCancel}
+        className="w-full mt-4 bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200"
+      >
+        ← Volver a métodos de pago
+      </button>
     </div>
   );
 };

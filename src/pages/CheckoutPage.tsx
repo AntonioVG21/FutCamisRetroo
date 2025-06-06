@@ -113,72 +113,95 @@ const CheckoutPage: React.FC = () => {
   // Calcular el total con descuento
   const totalWithDiscount = total - discountAmount;
 
+  // En la función handlePaymentMethod, simplificar la lógica:
   const handlePaymentMethod = async (method: 'bizum') => {
-    console.log(`Método de pago seleccionado: ${method}`);
-    try {
-      if (!validateForm()) {
-        toast.error('Por favor, completa todos los campos obligatorios.');
-        return;
-      }
-      
-      // Preparar los datos del pedido
-      const orderData = {
-        customer: {
-          name: customerData.name,
-          email: customerData.email,
-          phone: customerData.phone,
-          address: customerData.address,
-          city: customerData.city,
-          postalCode: customerData.postalCode,
-          leagues: customerData.leagues
-        },
-        items: items.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image,
-          isPack: item.isPack || false,
-          specifications: item.specifications || '',
-          unwantedKits: item.notes || ''
-        })),
-        total: totalWithDiscount,
-        discount: discountApplied ? {
-          code: discountCode,
-          amount: discountAmount
-        } : null,
-        paymentMethod: method,
-        createdAt: new Date(),
-        status: 'pending' as const
-      };
-      
-      console.log('Datos del pedido preparados:', orderData);
-      
-      // Si el método de pago es Bizum, mostrar el componente de Bizum
-      if (method === 'bizum') {
-        console.log('Procesando pago con Bizum...');
-        // Guardar la orden en Firestore usando el servicio
-        const result = await orderServices.createOrder(orderData);
-        console.log('Orden guardada con ID:', result.id);
-        
-        // Guardar el ID de la orden y mostrar el componente de Bizum
-        setOrderId(result.id);
-        setShowBizum(true);
-        console.log('Estado showBizum actualizado a:', true);
-        console.log('Estado orderId actualizado a:', result.id);
-
-        // Si se aplicó un descuento, marcarlo como canjeado
-        if (discountApplied) {
-          await discountServices.redeemDiscount(discountCode);
-        }
-        
-        return;
-      }
-    } catch (error) {
-      console.error('Error al procesar el pago:', error);
-      toast.error('Hubo un error al procesar tu pago. Por favor, inténtalo de nuevo.');
+  console.log(`Método de pago seleccionado: ${method}`);
+  try {
+    if (!validateForm()) {
+      toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
     }
-  };
+    
+    // Preparar los datos del pedido
+    const orderData = {
+      customer: {
+        name: customerData.name,
+        email: customerData.email,
+        phone: customerData.phone,
+        address: customerData.address,
+        city: customerData.city,
+        postalCode: customerData.postalCode,
+        leagues: customerData.leagues
+      },
+      items: items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        isPack: item.isPack || false,
+        specifications: item.specifications || '',
+        unwantedKits: item.notes || ''
+      })),
+      total: totalWithDiscount,
+      discount: discountApplied ? {
+        code: discountCode,
+        amount: discountAmount
+      } : null,
+      paymentMethod: method,
+      createdAt: new Date(),
+      status: 'pending' as const
+    };
+    
+    if (method === 'bizum') {
+      console.log('Procesando pago con Bizum...');
+      
+      // Generar ID único para el pedido
+      const tempOrderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Guardar temporalmente en localStorage como respaldo
+      localStorage.setItem('pendingOrder', JSON.stringify({
+        ...orderData,
+        id: tempOrderId,
+        timestamp: new Date().toISOString()
+      }));
+      
+      // Intentar guardar en Firebase, pero no bloquear si falla
+      try {
+        const result = await orderServices.createOrder(orderData);
+        setOrderId(result.id);
+        console.log('Orden guardada en Firebase con ID:', result.id);
+      } catch (firebaseError) {
+        console.warn('Error al guardar en Firebase, usando ID temporal:', firebaseError);
+        setOrderId(tempOrderId);
+      }
+      
+      setShowBizum(true);
+      
+      // Si se aplicó un descuento, intentar marcarlo como canjeado
+      if (discountApplied) {
+        try {
+          await discountServices.redeemDiscount(discountCode);
+        } catch (discountError) {
+          console.warn('Error al canjear descuento:', discountError);
+        }
+      }
+      
+      // Scroll automático al componente Bizum
+      setTimeout(() => {
+        const bizumElement = document.getElementById('bizum-checkout');
+        if (bizumElement) {
+          bizumElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      
+      return;
+    }
+  } catch (error) {
+    console.error('Error al procesar el pago:', error);
+    toast.error('Hubo un error al procesar tu pago. Por favor, inténtalo de nuevo.');
+  }
+};
   
   // Función para manejar el éxito del pago
   const handleOrderSuccess = () => {
