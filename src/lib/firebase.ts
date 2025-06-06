@@ -34,10 +34,9 @@ try {
   console.log('Inicializando Firestore con configuración optimizada...');
   db = initializeFirestore(app, {
     cacheSizeBytes: CACHE_SIZE_UNLIMITED,
-    // Desactivar long polling y volver a WebSockets para resolver el error de SID
-    experimentalForceLongPolling: false,
+    experimentalForceLongPolling: true,  // Enable long polling as fallback
     experimentalAutoDetectLongPolling: true,
-    ignoreUndefinedProperties: true, // Ignorar propiedades indefinidas
+    ignoreUndefinedProperties: true,
   });
   console.log('Firestore inicializado correctamente con configuración optimizada');
   
