@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { orderServices } from '../services/firebaseServices';
-import { FaCheck, FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Order } from '../types/Order';
 
 interface BizumCheckoutProps {
@@ -19,41 +18,24 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
 }) => {
   const [isConfirming, setIsConfirming] = useState(false);
   const [reference] = useState(`FutCamisRetros-${orderData.id.substring(0, 8)}`);
-  const bizumPhone = '640660362'; // Número de teléfono para Bizum (reemplazar con el número real)
+  const bizumPhone = '640660362';
   
   const handleConfirmPayment = async () => {
-    console.log('Iniciando confirmación de pago Bizum');
     setIsConfirming(true);
     try {
-      console.log('OrderData recibido:', orderData);
-      console.log('ID de la orden:', orderData.id);
-      
-      // Actualizar el estado de la orden en Firestore
-      console.log('Actualizando estado de la orden a processing...');
-      await orderServices.updateOrderStatus(orderData.id, 'processing');
-      
-      console.log('Actualizando detalles de pago...');
+      // Simplemente notificamos el éxito y pasamos los detalles
       const paymentDetails = {
         paymentMethod: 'bizum',
         reference: reference,
         status: 'processing',
         timestamp: new Date()
       };
-      console.log('Detalles de pago a guardar:', paymentDetails);
       
-      await orderServices.updateOrderPaymentDetails(orderData.id, paymentDetails);
-      
-      console.log('Pago confirmado exitosamente');
-      toast.success('¡Pago confirmado! Verificaremos tu transferencia.');
-      
-      console.log('Llamando a onSuccess...');
-      onSuccess({
-        paymentMethod: 'bizum',
-        reference: reference
-      });
+      toast.success('¡Pago registrado! Por favor, realiza la transferencia Bizum.');
+      onSuccess(paymentDetails);
     } catch (error) {
-      console.error('Error al confirmar el pago por Bizum:', error);
-      toast.error('Hubo un error al confirmar tu pago. Por favor, inténtalo de nuevo.');
+      console.error('Error:', error);
+      toast.error('Hubo un error. Por favor, inténtalo de nuevo.');
     } finally {
       setIsConfirming(false);
     }
@@ -66,7 +48,7 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md mx-auto">
       <h3 className="text-xl font-semibold text-white mb-4">Pago con Bizum</h3>
       
       <div className="bg-gray-700 p-4 rounded-lg mb-6">
@@ -111,42 +93,28 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
         </div>
       </div>
 
-      <div className="bg-yellow-500 bg-opacity-10 border border-yellow-500 p-4 rounded-lg mb-6">
-        <h4 className="text-yellow-500 font-semibold mb-2">Instrucciones:</h4>
-        <ol className="list-decimal list-inside text-gray-300 space-y-2">
-          <li>Abre la app de tu banco o la app de Bizum</li>
-          <li>Realiza un pago al número <span className="text-white font-medium">{bizumPhone}</span></li>
-          <li>Introduce el importe exacto: <span className="text-white font-medium">{amount.toFixed(2)} €</span></li>
-          <li>En el concepto, escribe la referencia: <span className="text-white font-medium">{reference}</span></li>
-          <li>Una vez realizado el pago, pulsa "He realizado el pago"</li>
-        </ol>
-      </div>
-
-      <div className="flex flex-col space-y-3">
+      <div className="space-y-4">
         <button
           onClick={handleConfirmPayment}
           disabled={isConfirming}
-          className="flex items-center justify-center space-x-2 w-full py-3 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
-          <FaCheck className="h-5 w-5 mr-2" />
-          <span className="text-lg font-semibold">
-            {isConfirming ? 'Confirmando...' : 'He realizado el pago'}
-          </span>
+          {isConfirming ? 'Procesando...' : 'Confirmar Pago'}
         </button>
-        
+
         <button
           onClick={openWhatsApp}
-          className="flex items-center justify-center space-x-2 w-full py-3 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200"
         >
-          <FaWhatsapp className="h-5 w-5 mr-2" />
-          <span className="text-lg font-semibold">Notificar por WhatsApp</span>
+          <FaWhatsapp className="text-xl" />
+          <span>Notificar por WhatsApp</span>
         </button>
-        
+
         <button
           onClick={onCancel}
-          className="mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200"
         >
-          Cancelar y elegir otro método de pago
+          Cancelar
         </button>
       </div>
     </div>
