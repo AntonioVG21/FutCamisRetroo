@@ -11,6 +11,16 @@ service firebase.storage {
       allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
     }
     
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
     // Reglas para imágenes de usuarios (si se implementa en el futuro)
     match /users/{userId}/{imageId} {
       // Los usuarios solo pueden leer sus propias imágenes
@@ -23,3 +33,1455 @@ service firebase.storage {
     }
   }
 }
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;
+      
+      // Permitir subir, actualizar o eliminar imágenes (para desarrollo)
+      // En producción, deberías restringir esto solo a administradores
+      allow write, update, delete: if true;
+    }
+    
+    // Reglas para imágenes de usuarios (si se implementa en el futuro)
+    match /users/{userId}/{imageId} {
+      // Los usuarios solo pueden leer sus propias imágenes
+      // En una implementación real, deberías verificar si el usuario está autenticado
+      // y si la imagen pertenece a ese usuario
+      allow read: if false; // Cambiar a una regla de autenticación adecuada
+      
+      // Los usuarios solo pueden subir, actualizar o eliminar sus propias imágenes
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+  }
+}
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para imágenes de productos
+    match /products/{imageId} {
+      // Cualquiera puede leer imágenes de productos
+      allow read: if true;
+      
+      // Solo el administrador puede subir, actualizar o eliminar imágenes
+      // En una implementación real, deberías verificar si el usuario es administrador
+      allow write, update, delete: if false; // Cambiar a una regla de autenticación adecuada
+    }
+    
+    // Reglas para imágenes de camisetas
+    match /jerseys/{jerseyId}/{imageId} {
+      // Cualquiera puede leer imágenes de camisetas
+      allow read: if true;

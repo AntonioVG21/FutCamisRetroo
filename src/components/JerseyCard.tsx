@@ -87,7 +87,7 @@ const JerseyCard: React.FC<JerseyCardProps> = ({ jersey }) => {
                 });
               }
             }}
-            className={`rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity ${
+            className={`rounded-full p-2 transition-opacity ${
               isFavorite(jersey.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-800 hover:bg-gray-700'
             }`}
           >

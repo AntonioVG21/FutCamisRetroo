@@ -3,7 +3,9 @@ import { ShoppingCart, Menu, X, Trophy, ShieldCheck, Globe, PhoneCall, Heart } f
 import { leagues } from '../data/leagues';
 import { useCartStore } from '../store/cartStore';
 import { useFavoritesStore } from '../store/favoritesStore';
+import { useDiscountStore } from '../store/discountStore';
 import logoImage from '../imagenes/camisetas-web/Logo-removebg-preview.png';
+import toast from 'react-hot-toast';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,6 +13,7 @@ const Header: React.FC = () => {
   const [logoClickCount, setLogoClickCount] = useState(0);
   const { items, toggleCart } = useCartStore();
   const { items: favoriteItems } = useFavoritesStore();
+  const { activateDiscount, isDiscountActive } = useDiscountStore();
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -29,7 +32,12 @@ const Header: React.FC = () => {
     setLogoClickCount(newCount);
     
     if (newCount === 5) {
-      window.location.href = '/admin';
+      if (!isDiscountActive) {
+        activateDiscount(50); // Activar descuento del 50%
+        toast.success('¡Has conseguido un 50% de descuento en tu compra!');
+      } else {
+        toast.error('Ya tienes un descuento activo');
+      }
       setLogoClickCount(0);
     } else {
       // Reset counter after 3 seconds if not completed

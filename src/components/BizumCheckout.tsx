@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaWhatsapp, FaCopy, FaCheckCircle } from 'react-icons/fa';
+import { orderServices } from '../services/firebaseServices';
 
 interface BizumCheckoutProps {
   amount: number;
@@ -25,8 +26,27 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   useEffect(() => {
     const element = document.getElementById('bizum-checkout');
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Usar setTimeout para asegurar que el scroll ocurre después del renderizado
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }
+    
+    // Ajustar el tamaño en dispositivos móviles
+    const adjustMobileView = () => {
+      if (window.innerWidth < 768) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
+      
+      return () => {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      };
+    };
+    
+    const cleanup = adjustMobileView();
+    return cleanup;
   }, []);
   
   const copyReference = async () => {
@@ -45,7 +65,7 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
     }
   };
   
-  const handleConfirmPayment = () => {
+  const handleConfirmPayment = async () => {
     setStep('confirming');
     setCountdown(3);
     
@@ -69,6 +89,26 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
             ...paymentDetails,
             orderId: orderData.id
           }));
+          
+          // Actualizar el estado de la orden en Firestore
+          try {
+            // Actualizar el estado de la orden a 'processing'
+            orderServices.updateOrderStatus(orderData.id, 'processing');
+            
+            // Actualizar los detalles de pago
+            orderServices.updateOrderPaymentDetails(orderData.id, {
+              paymentMethod: 'bizum',
+              paymentId: reference,
+              paymentStatus: 'processing',
+              reference: reference,
+              timestamp: new Date()
+            });
+            
+            console.log('Orden actualizada correctamente en Firestore');
+          } catch (error) {
+            console.error('Error al actualizar la orden en Firestore:', error);
+            toast.error('Error al registrar el pago. Por favor, contacta con soporte.');
+          }
           
           toast.success('¡Pago registrado! No olvides realizar la transferencia Bizum.');
           onSuccess(paymentDetails);
@@ -101,7 +141,21 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   };
 
   return (
-    <div id="bizum-checkout" className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-2xl max-w-lg mx-auto border border-gray-700">
+    <div id="bizum-checkout" className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-2xl max-w-lg mx-auto border border-gray-700 md:mt-0 mt-4">
+      {/* Botón de cierre para móvil */}
+      <div className="md:hidden flex justify-end mb-2">
+        <button 
+          onClick={onCancel}
+          className="text-gray-400 hover:text-white"
+          aria-label="Cerrar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      {/* Resto del contenido */}
       <div className="text-center mb-6">
         <div className="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-2xl">💳</span>
@@ -201,7 +255,7 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
       {/* Botón cancelar */}
       <button
         onClick={onCancel}
-        className="w-full mt-4 bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200"
+        className="w-full mt-4 bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200 md:block hidden"
       >
         ← Volver a métodos de pago
       </button>

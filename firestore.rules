@@ -27,5 +27,10 @@ service cloud.firestore {
       // Solo el administrador puede eliminar descuentos
       allow delete: if false; // Cambiar a una regla de autenticación adecuada
     }
+    // Reglas para jerseys
+    match /jerseys/{jerseyId} {
+      // Permitir lectura, creación, actualización y eliminación solo para usuarios autenticados
+      allow read, create, update, delete: if request.auth != null;
+    }
   }
 }
