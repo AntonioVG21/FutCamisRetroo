@@ -13,6 +13,7 @@ import Admin from './pages/Admin';
 import SecretAdmin from './pages/SecretAdmin';
 import AdminPacks from './pages/AdminPacks';
 import Cart from './components/Cart';
+import CustomCookieConsent from './components/CookieConsent';
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
       </Routes>
       <Toaster position="top-center" />
       {window.location.pathname !== '/checkout' && <Cart />}
+      <CustomCookieConsent />
     </div>
   );
 }
