@@ -18,7 +18,31 @@ import CustomCookieConsent from './components/CookieConsent';
 function App() {
   const location = useLocation();
 
-  // Efecto para hacer scroll al inicio cuando cambia la ruta
+  // 👉 Inserta el script solo una vez
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.setAttribute('async', '');
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-DQZDW6TNY6';
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-DQZDW6TNY6');
+  }, []);
+
+  // 👉 Seguimiento de ruta cada vez que cambia la página
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag('config', 'G-DQZDW6TNY6', {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
+
+  // 👉 Scroll al top al cambiar de ruta
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
@@ -35,11 +59,12 @@ function App() {
         <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-secret" element={<SecretAdmin />} />
         <Route path="/admin-packs" element={<AdminPacks />} />
-        <Route path="/secret-admin" element={<SecretAdmin />} />
       </Routes>
-      <Toaster position="top-center" />
-      {window.location.pathname !== '/checkout' && <Cart />}
+
+      <Cart />
+      <Toaster />
       <CustomCookieConsent />
     </div>
   );
