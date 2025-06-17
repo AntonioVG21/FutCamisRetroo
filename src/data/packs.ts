@@ -11,7 +11,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye:\n• 1 x Pulsera\n• 1 x Tarjeta de agradecimiento\n• 2 x Pegatinas (sorpresa)\n• 8 x Cromos de futbolistas (aleatorios)',
+    specifications: 'Incluye: \n• 1 x Camiseta aleatoria\ \n• 1 x Pulsera\n• 1 x Tarjeta de agradecimiento\n• 2 x Pegatinas (sorpresa)\n• 8 x Cromos de futbolistas (aleatorios)',
     notes: 'El pack perfecto para iniciarte en el mundo del coleccionismo.'
   },
   {
@@ -23,7 +23,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye:\n• 1 x Pulsera\n• 1 x Llavero estilo carta FIFA\n• 1 x Foto de futbolista (sorpresa)\n• 4 x Pegatinas\n• 8 x Cromos\n• 🏅 1 x Tarjeta dorada → ¡Participa en un sorteo mensual de una camiseta oficial!',
+    specifications: 'Incluye: \n• 1 x Camiseta aleatoria\ \n• 1 x Pulsera\n• 1 x Llavero estilo carta FIFA\n• 1 x Foto de futbolista (sorpresa)\n• 4 x Pegatinas\n• 8 x Cromos\n• 🏅 1 x Tarjeta dorada → ¡Participa en un sorteo mensual de una camiseta oficial!',
     notes: 'Para verdaderos aficionados que buscan algo más que una camiseta.'
   },
   {
@@ -35,7 +35,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye:\n• 1 x Pulsera\n• 1 x Llavero\n• 1 x Lanyard\n• 1 x Foto de futbolista\n• 6 x Pegatinas\n• 8 x Cromos\n• 🏅 1 x Tarjeta dorada → ¡Participa en un sorteo mensual de una camiseta oficial!',
+    specifications: 'Incluye: \n• 1 x Camiseta aleatoria\ \n• 1 x Pulsera\n• 1 x Llavero\n• 1 x Lanyard\n• 1 x Foto de futbolista\n• 6 x Pegatinas\n• 8 x Cromos\n• 🏅 1 x Tarjeta dorada → ¡Participa en un sorteo mensual de una camiseta oficial!',
     notes: 'La experiencia definitiva para coleccionistas. Todo lo que un verdadero fan necesita.'
   },
   // Packs x5
@@ -48,7 +48,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x5):\n• 5 x Pulseras\n• 5 x Tarjetas de agradecimiento\n• 10 x Pegatinas (sorpresa)\n• 40 x Cromos de futbolistas (aleatorios)\n• ¡Ahorra 15€!',
+    specifications: 'Incluye (x5): \n• 5 x Camiseta aleatoria\ \n• 5 x Pulseras\n• 5 x Tarjetas de agradecimiento\n• 10 x Pegatinas (sorpresa)\n• 40 x Cromos de futbolistas (aleatorios)\n• ¡Ahorra 15€!',
     notes: 'Pack grupal con descuento especial. Ideal para grupos o coleccionistas.'
   },
   {
@@ -60,7 +60,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x5):\n• 5 x Pulseras\n• 5 x Llaveros estilo carta FIFA\n• 5 x Fotos de futbolista (sorpresa)\n• 20 x Pegatinas\n• 40 x Cromos\n• 🏅 5 x Tarjetas doradas → ¡5 participaciones en sorteos!\n• ¡Ahorra 12.50€!',
+    specifications: 'Incluye (x5): \n• 5 x Camiseta aleatoria\ \n• 5 x Pulseras\n• 5 x Llaveros estilo carta FIFA\n• 5 x Fotos de futbolista (sorpresa)\n• 20 x Pegatinas\n• 40 x Cromos\n• 🏅 5 x Tarjetas doradas → ¡5 participaciones en sorteos!\n• ¡Ahorra 12.50€!',
     notes: 'Pack grupal con extras para cada pack. ¡Ideal para grupos que quieren más!'
   },
   {
@@ -72,7 +72,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x5):\n• 5 x Pulseras\n• 5 x Llaveros\n• 5 x Lanyards\n• 5 x Fotos de futbolista\n• 30 x Pegatinas\n• 40 x Cromos\n• 🏅 5 x Tarjetas doradas → ¡5 participaciones en sorteos!\n• ¡Ahorra 25€!',
+    specifications: 'Incluye (x5): \n• 5 x Camiseta aleatoria\ \n• 5 x Pulseras\n• 5 x Llaveros\n• 5 x Lanyards\n• 5 x Fotos de futbolista\n• 30 x Pegatinas\n• 40 x Cromos\n• 🏅 5 x Tarjetas doradas → ¡5 participaciones en sorteos!\n• ¡Ahorra 25€!',
     notes: 'La experiencia coleccionista definitiva multiplicada por 5. ¡Ideal para grupos de fans!'
   },
   // Packs x10
@@ -85,7 +85,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x10):\n• 10 x Pulseras\n• 10 x Tarjetas de agradecimiento\n• 20 x Pegatinas (sorpresa)\n• 80 x Cromos de futbolistas (aleatorios)\n• ¡Ahorra 50€!',
+    specifications: 'Incluye (x10): \n• 10 x Camiseta aleatoria\ \n• 10 x Pulseras\n• 10 x Tarjetas de agradecimiento\n• 20 x Pegatinas (sorpresa)\n• 80 x Cromos de futbolistas (aleatorios)\n• ¡Ahorra 50€!',
     notes: 'Máximo ahorro para grandes pedidos. ¡La mejor opción para grupos completos!'
   },
   {
@@ -97,7 +97,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x10):\n• 10 x Pulseras\n• 10 x Llaveros estilo carta FIFA\n• 10 x Fotos de futbolista (sorpresa)\n• 40 x Pegatinas\n• 80 x Cromos\n• 🏅 10 x Tarjetas doradas → ¡10 participaciones en sorteos!\n• ¡Ahorra 50€!',
+    specifications: 'Incluye (x10): \n• 10 x Camiseta aleatoria\ \n• 10 x Pulseras\n• 10 x Llaveros estilo carta FIFA\n• 10 x Fotos de futbolista (sorpresa)\n• 40 x Pegatinas\n• 80 x Cromos\n• 🏅 10 x Tarjetas doradas → ¡10 participaciones en sorteos!\n• ¡Ahorra 50€!',
     notes: 'Máximo ahorro con todos los extras. ¡Perfecto para grupos completos!'
   },
   {
@@ -109,7 +109,7 @@ export const packs: Pack[] = [
     freeJerseys: 0,
     image: 'https://images.pexels.com/photos/9789826/pexels-photo-9789826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     isPack: true,
-    specifications: 'Incluye (x10):\n• 10 x Pulseras\n• 10 x Llaveros\n• 10 x Lanyards\n• 10 x Fotos de futbolista\n• 60 x Pegatinas\n• 80 x Cromos\n• 🏅 10 x Tarjetas doradas → ¡10 participaciones en sorteos!\n• ¡Ahorra 80€!',
+    specifications: 'Incluye (x10): \n• 10 x Camiseta aleatoria\ \n• 10 x Pulseras\n• 10 x Llaveros\n• 10 x Lanyards\n• 10 x Fotos de futbolista\n• 60 x Pegatinas\n• 80 x Cromos\n• 🏅 10 x Tarjetas doradas → ¡10 participaciones en sorteos!\n• ¡Ahorra 80€!',
     notes: 'La mejor oferta para grandes grupos. ¡La experiencia coleccionista definitiva al mejor precio!'
   }
 ];

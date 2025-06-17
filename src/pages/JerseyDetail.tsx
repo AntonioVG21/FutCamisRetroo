@@ -11,6 +11,7 @@ import { BsTypeH1 } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { jerseys } from '../data/jerseys';
 import toast from 'react-hot-toast';
+import OptimizedImage from '../components/OptimizedImage';
 
 const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
@@ -91,10 +92,13 @@ const JerseyDetail: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
             {/* Image Section */}
             <div className="relative aspect-square">
-              <img 
+              <OptimizedImage 
                 src={jersey.image} 
                 alt={jersey.name}
-                className="w-full h-full object-cover rounded-lg"
+                className="rounded-lg"
+                priority="high"
+                width={600}
+                height={600}
               />
               <button className="absolute top-4 right-4 bg-gray-800 hover:bg-gray-700 text-white rounded-full p-2">
                 <FiHeart className="h-6 w-6" />

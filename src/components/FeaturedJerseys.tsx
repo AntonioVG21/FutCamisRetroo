@@ -3,6 +3,7 @@ import { jerseys } from '../data/jerseys';
 import { FiShoppingCart, FiHeart } from 'react-icons/fi';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useCartStore } from '../store/cartStore';
+import OptimizedImage from './OptimizedImage';
 
 const FeaturedJerseys: React.FC = () => {
   const featuredJerseys = jerseys.filter(jersey => jersey.isRetro).slice(0, 4);
@@ -39,10 +40,11 @@ const FeaturedJerseys: React.FC = () => {
             >
               <a href={`/jersey/${jersey.id}`} className="block">
                 <div className="relative aspect-square overflow-hidden">
-                  <img 
+                  <OptimizedImage 
                     src={jersey.image} 
                     alt={jersey.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="group-hover:scale-110"
+                    priority="low"
                   />
                   <div className="absolute top-4 right-4 flex gap-2">
                   {jersey.isRetro && (
