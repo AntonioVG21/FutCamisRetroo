@@ -28,21 +28,26 @@ const Hero: React.FC = () => {
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-            ELIGE TU <span className="text-yellow-500">CAMISETA</span>
+            CAMISETAS <span className="text-yellow-500">RETRO</span> DE FÚTBOL
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Las mejores camisetas de fútbol de todas las ligas y épocas
+            Las mejores camisetas retro de fútbol baratas de todas las ligas y épocas
+          </p>
+          <p className="text-lg text-gray-400 mb-8 max-w-3xl mx-auto hidden md:block">
+            Revive la historia del fútbol con nuestra colección de camisetas clásicas a precios increíbles
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a 
               href="/catalog" 
               className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+              aria-label="Ver catálogo de camisetas retro de fútbol"
             >
-              VER CATÁLOGO
+              VER CAMISETAS RETRO
             </a>
             <a 
               href="/packs" 
               className="bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 border border-yellow-500 shadow-lg"
+              aria-label="Ver packs sorpresa de camisetas baratas"
             >
               PACKS SORPRESA
             </a>

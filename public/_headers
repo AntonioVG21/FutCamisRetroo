@@ -1,0 +1,19 @@
+# Encabezados de seguridad y SEO para todas las páginas
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.pexels.com https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com;
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Encabezados específicos para archivos estáticos
+/imagenes/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Encabezados para archivos JavaScript y CSS
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.css
+  Cache-Control: public, max-age=31536000, immutable

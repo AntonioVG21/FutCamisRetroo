@@ -53,7 +53,10 @@ const Footer: React.FC = () => {
               <span className="text-yellow-500">FutCamis</span>Retros
             </h2>
             <p className="mb-4 text-sm">
-              Tu tienda especializada en camisetas de fútbol de todas las ligas y épocas.
+              Tu tienda especializada en camisetas retro de fútbol baratas de todas las ligas y épocas.
+            </p>
+            <p className="mb-4 text-sm text-gray-400">
+              Ofrecemos las mejores camisetas clásicas con envíos rápidos y precios increíbles.
             </p>
             <h3 className="text-lg font-bold text-white mb-3">Síguenos en redes</h3>
             <div className="flex space-x-4 mb-6">
@@ -74,11 +77,12 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold text-white mb-4">Categorías</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/league/retro" className="hover:text-yellow-500 transition-colors">Retro</a></li>
-              <li><a href="/league/premier-league" className="hover:text-yellow-500 transition-colors">Premier League</a></li>
-              <li><a href="/league/la-liga" className="hover:text-yellow-500 transition-colors">LaLiga</a></li>
-              <li><a href="/league/serie-a" className="hover:text-yellow-500 transition-colors">Serie A</a></li>
-              <li><a href="/league/bundesliga" className="hover:text-yellow-500 transition-colors">Bundesliga</a></li>
+              <li><a href="/league/retro" className="hover:text-yellow-500 transition-colors">Camisetas Retro</a></li>
+              <li><a href="/league/premier-league" className="hover:text-yellow-500 transition-colors">Camisetas Premier League</a></li>
+              <li><a href="/league/la-liga" className="hover:text-yellow-500 transition-colors">Camisetas LaLiga</a></li>
+              <li><a href="/league/serie-a" className="hover:text-yellow-500 transition-colors">Camisetas Serie A</a></li>
+              <li><a href="/league/bundesliga" className="hover:text-yellow-500 transition-colors">Camisetas Bundesliga</a></li>
+              <li><a href="/catalog" className="hover:text-yellow-500 transition-colors">Todas las Camisetas</a></li>
             </ul>
           </div>
 
@@ -87,8 +91,10 @@ const Footer: React.FC = () => {
             <ul className="space-y-2 text-sm">
               <li><a href="/" className="hover:text-yellow-500 transition-colors">Inicio</a></li>
               <li><a href="/packs" className="hover:text-yellow-500 transition-colors">Packs Sorpresa</a></li>
-              <li><a href="/kids" className="hover:text-yellow-500 transition-colors">Niños</a></li>
+              <li><a href="/kids" className="hover:text-yellow-500 transition-colors">Camisetas para Niños</a></li>
               <li><a href="/#about" className="hover:text-yellow-500 transition-colors">Sobre Nosotros</a></li>
+              <li><a href="/catalog?sort=price-asc" className="hover:text-yellow-500 transition-colors">Camisetas Baratas</a></li>
+              <li><a href="/catalog?filter=retro" className="hover:text-yellow-500 transition-colors">Camisetas Retro</a></li>
             </ul>
           </div>
 

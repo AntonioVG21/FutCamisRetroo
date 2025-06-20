@@ -1,0 +1,14 @@
+# robots.txt para FutCamisRetros
+User-agent: *
+Allow: /
+
+# No indexar páginas de administración
+Disallow: /admin
+Disallow: /admin-secret
+Disallow: /admin-packs
+
+# No indexar páginas de checkout
+Disallow: /checkout
+
+# Sitemap
+Sitemap: https://futcamisretros.com/sitemap.xml

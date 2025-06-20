@@ -6,8 +6,9 @@ const LeagueBlock: React.FC<{
   id: string; 
   name: string; 
   icon: string;
+  description?: string;
   isRetro?: boolean;
-}> = ({ id, name, icon, isRetro }) => {
+}> = ({ id, name, icon, description, isRetro }) => {
   return (
     <a 
       href={`/league/${id}`}
@@ -40,6 +41,11 @@ const LeagueBlock: React.FC<{
         {name}
       </h3>
       
+      {/* Description - visible only on hover for mobile, always visible on desktop */}
+      <p className={`text-sm mt-2 opacity-0 group-hover:opacity-100 md:opacity-80 text-center transition-opacity duration-300 ${isRetro ? 'text-black' : 'text-gray-300'}`}>
+        {description ? description.split('.')[0] : `Camisetas de ${name}`}
+      </p>
+      
       {/* Shine effect on hover */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
     </a>
@@ -52,10 +58,13 @@ const LeagueBlocks: React.FC = () => {
       <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            SELECCIONA <span className="text-yellow-500">TU LIGA</span>
+            CAMISETAS RETRO POR <span className="text-yellow-500">LIGAS</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Explora nuestras colecciones por ligas y encuentra la camiseta de tu equipo favorito
+            Explora nuestras colecciones de camisetas retro baratas por ligas y encuentra la camiseta de fútbol de tu equipo favorito a precios increíbles
+          </p>
+          <p className="text-gray-500 max-w-2xl mx-auto mt-2">
+            Todas nuestras camisetas retro son de calidad premium, con envíos rápidos y garantía de satisfacción
           </p>
         </div>
         
@@ -66,6 +75,7 @@ const LeagueBlocks: React.FC = () => {
               id={league.id}
               name={league.name}
               icon={league.icon}
+              description={league.description}
               isRetro={league.isRetro}
             />
           ))}

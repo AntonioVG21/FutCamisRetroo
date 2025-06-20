@@ -25,10 +25,13 @@ const FeaturedJerseys: React.FC = () => {
       <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            CAMISETAS <span className="text-yellow-500">DESTACADAS</span>
+            CAMISETAS <span className="text-yellow-500">RETRO DESTACADAS</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Revive la historia con nuestras camisetas retro más icónicas
+            Revive la historia con nuestras camisetas retro de fútbol más icónicas a precios increíbles
+          </p>
+          <p className="text-gray-500 max-w-3xl mx-auto mt-4">
+            Encuentra las mejores camisetas clásicas de tus equipos favoritos. Calidad premium a precios baratos.
           </p>
         </div>
         

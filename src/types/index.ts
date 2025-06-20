@@ -2,6 +2,9 @@ export interface League {
   id: string;
   name: string;
   icon: string;
+  description?: string;
+  seoTitle?: string;
+  seoDescription?: string;
   isRetro?: boolean;
   teams?: string[];
 }

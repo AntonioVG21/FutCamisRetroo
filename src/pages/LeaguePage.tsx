@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import { FiSearch } from 'react-icons/fi';
-
+import SEO from '../components/SEO';
 import { useParams } from 'react-router-dom';
 
 interface RouteParams {
@@ -54,18 +54,34 @@ const LeaguePage: React.FC = () => {
     );
   }
 
+  // Preparar datos para el esquema de datos estructurados
+  const schemaData = {
+    name: currentLeague.name,
+    description: currentLeague.description || `Camisetas de ${currentLeague.name}`,
+    url: `https://futcamisretros.com/league/${leagueId}`,
+    image: 'https://futcamisretros.com/imagenes/hero-background.jpg'
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
+      <SEO 
+        title={currentLeague.seoTitle || `Camisetas de ${currentLeague.name} | FutCamisRetros`}
+        description={currentLeague.seoDescription || `Descubre las mejores camisetas de ${currentLeague.name} a precios increíbles. Envíos rápidos y calidad premium.`}
+        keywords={`camisetas ${currentLeague.name}, camisetas retro ${currentLeague.name}, camisetas baratas ${currentLeague.name}, camisetas de fútbol ${currentLeague.name}`}
+        canonicalUrl={`https://futcamisretros.com/league/${leagueId}`}
+        schemaType="CollectionPage"
+        schemaData={schemaData}
+      />
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            {currentLeague.isRetro ? 'Camisetas Retro' : currentLeague.name}
+            {currentLeague.isRetro ? 'CAMISETAS RETRO DE FÚTBOL' : `CAMISETAS DE ${currentLeague.name.toUpperCase()}`}
           </h1>
           <p className="text-gray-300 text-lg mb-6">
-            {currentLeague.isRetro
-              ? 'Revive la historia del fútbol con nuestras camisetas retro'
-              : `Descubre las mejores camisetas de ${currentLeague.name}`}
+            {currentLeague.description || (currentLeague.isRetro
+              ? 'Revive la historia del fútbol con nuestras camisetas retro baratas de calidad premium'
+              : `Descubre las mejores camisetas de ${currentLeague.name} a precios increíbles`)}
           </p>
           
           {/* Buscador */}

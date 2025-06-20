@@ -12,7 +12,10 @@ const AboutSection: React.FC = () => {
               SOBRE <span className="text-yellow-500">NOSOTROS</span>
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              En FutCamisRetros somos apasionados del fútbol y las camisetas históricas. Nuestra misión es ofrecerte las mejores camisetas retro de fútbol de todas las ligas y épocas con la mejor calidad y al mejor precio. Revive los momentos más emblemáticos del deporte rey con nuestras camisetas de leyendas y equipos históricos.
+              En FutCamisRetros somos apasionados del fútbol y las camisetas históricas. Nuestra misión es ofrecerte las mejores <strong>camisetas retro de fútbol</strong> de todas las ligas y épocas con la mejor calidad y al mejor precio. Revive los momentos más emblemáticos del deporte rey con nuestras <strong>camisetas baratas</strong> de leyendas y equipos históricos.
+            </p>
+            <p className="text-gray-400 mb-6 leading-relaxed">
+              Nos especializamos en <strong>camisetas de fútbol retro</strong> de la Premier League, LaLiga, Serie A, Bundesliga y muchas más competiciones. Todas nuestras <strong>camisetas clásicas</strong> están fabricadas con materiales de alta calidad para garantizar durabilidad y comodidad a precios accesibles.
             </p>
            
             
@@ -44,7 +47,8 @@ const AboutSection: React.FC = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p className="text-white text-xl font-bold">Revive la historia del fútbol con nuestras camisetas retro</p>
+                <p className="text-white text-xl font-bold">Revive la historia del fútbol con nuestras camisetas retro baratas</p>
+                <p className="text-white text-sm mt-2">Calidad premium, precios increíbles y envíos rápidos</p>
               </div>
             </div>
             
