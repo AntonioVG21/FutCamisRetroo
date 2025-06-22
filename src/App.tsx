@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { HelmetProvider } from 'react-helmet-async';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import PacksPage from './pages/PacksPage';
@@ -49,27 +48,26 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <HelmetProvider>
-      <div className="min-h-screen bg-gray-900 text-gray-100">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/packs" element={<PacksPage />} />
-          <Route path="/kids" element={<Kids />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/league/:leagueId" element={<LeaguePage />} />
-          <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin-secret" element={<SecretAdmin />} />
-          <Route path="/admin-packs" element={<AdminPacks />} />
-        </Routes>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/packs" element={<PacksPage />} />
+        <Route path="/kids" element={<Kids />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/league/:leagueId" element={<LeaguePage />} />
+        <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-secret" element={<SecretAdmin />} />
+        <Route path="/admin-packs" element={<AdminPacks />} />
+        <Route path="/secret-admin" element={<SecretAdmin />} />
+      </Routes>
 
-        <Cart />
-        <Toaster />
-        <CustomCookieConsent />
-      </div>
-    </HelmetProvider>
+      <Cart />
+      <Toaster />
+      <CustomCookieConsent />
+    </div>
   );
 }
 

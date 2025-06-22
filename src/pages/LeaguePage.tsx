@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { jerseys } from '../data/jerseys';
 import { leagues } from '../data/leagues';
 import JerseyCard from '../components/JerseyCard';
@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import { FiSearch } from 'react-icons/fi';
-import SEO from '../components/SEO';
 import { useParams } from 'react-router-dom';
 
 interface RouteParams {
@@ -54,24 +53,30 @@ const LeaguePage: React.FC = () => {
     );
   }
 
-  // Preparar datos para el esquema de datos estructurados
-  const schemaData = {
-    name: currentLeague.name,
-    description: currentLeague.description || `Camisetas de ${currentLeague.name}`,
-    url: `https://futcamisretros.com/league/${leagueId}`,
-    image: 'https://futcamisretros.com/imagenes/hero-background.jpg'
-  };
+  // Establecer el título y metaetiquetas de la página
+  useEffect(() => {
+    if (currentLeague) {
+      // Establecer el título
+      document.title = currentLeague.seoTitle || `Camisetas de ${currentLeague.name} | FutCamisRetros`;
+      
+      // Establecer metaetiquetas
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const description = currentLeague.seoDescription || `Descubre las mejores camisetas de ${currentLeague.name} a precios increíbles. Envíos rápidos y calidad premium.`;
+      
+      if (metaDescription) {
+        metaDescription.setAttribute('content', description);
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = description;
+        document.head.appendChild(meta);
+      }
+    }
+  }, [currentLeague, leagueId]);
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <SEO 
-        title={currentLeague.seoTitle || `Camisetas de ${currentLeague.name} | FutCamisRetros`}
-        description={currentLeague.seoDescription || `Descubre las mejores camisetas de ${currentLeague.name} a precios increíbles. Envíos rápidos y calidad premium.`}
-        keywords={`camisetas ${currentLeague.name}, camisetas retro ${currentLeague.name}, camisetas baratas ${currentLeague.name}, camisetas de fútbol ${currentLeague.name}`}
-        canonicalUrl={`https://futcamisretros.com/league/${leagueId}`}
-        schemaType="CollectionPage"
-        schemaData={schemaData}
-      />
+
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
