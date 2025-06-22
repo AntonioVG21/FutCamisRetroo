@@ -5,7 +5,6 @@ export const leagues: League[] = [
     id: 'selecciones',
     name: 'Selecciones',
     icon: 'Flag',
-    description: 'Camisetas retro de selecciones nacionales que representan el orgullo de cada país en competiciones internacionales. Encuentra camisetas baratas de fútbol de tu selección favorita.',
     seoTitle: 'Camisetas Retro de Selecciones Nacionales | Baratas y Originales',
     seoDescription: 'Compra camisetas retro de selecciones nacionales de fútbol a precios increíbles. Envíos rápidos y calidad premium garantizada.',
     teams: [
@@ -32,7 +31,6 @@ export const leagues: League[] = [
     name: 'Retro',
     icon: 'Trophy',
     isRetro: true,
-    description: 'Revive la historia del fútbol con nuestras camisetas retro baratas de equipos legendarios. Diseños clásicos con calidad premium.',
     seoTitle: 'Camisetas Retro de Fútbol | Clásicas y Baratas | FutCamisRetros',
     seoDescription: 'Colección exclusiva de camisetas retro de fútbol a precios increíbles. Revive los momentos más legendarios del fútbol con nuestras camisetas clásicas.',
     teams: [
@@ -74,7 +72,6 @@ export const leagues: League[] = [
     id: 'premier-league',
     name: 'Premier League',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Premier League inglesa a precios baratos. Manchester United, Liverpool, Arsenal y todos los grandes equipos ingleses.',
     seoTitle: 'Camisetas Retro Premier League | Equipos Ingleses | Baratas',
     seoDescription: 'Compra camisetas retro de equipos de la Premier League a precios increíbles. Manchester United, Liverpool, Chelsea, Arsenal y más.',
     teams: [
@@ -104,7 +101,6 @@ export const leagues: League[] = [
     id: 'laliga',
     name: 'LaLiga',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de LaLiga española a precios baratos. Real Madrid, Barcelona, Atlético y todos los grandes equipos españoles.',
     seoTitle: 'Camisetas Retro LaLiga | Equipos Españoles | Baratas',
     seoDescription: 'Encuentra camisetas retro de equipos de LaLiga española a precios increíbles. Real Madrid, Barcelona, Atlético de Madrid y más.',
     teams: [
@@ -134,7 +130,6 @@ export const leagues: League[] = [
     id: 'serie-a',
     name: 'Serie A',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Serie A italiana a precios baratos. Juventus, Milan, Inter y todos los grandes equipos italianos.',
     seoTitle: 'Camisetas Retro Serie A | Equipos Italianos | Baratas',
     seoDescription: 'Descubre camisetas retro de equipos de la Serie A italiana a precios increíbles. Juventus, AC Milan, Inter, Roma y más.',
     teams: [
@@ -164,7 +159,6 @@ export const leagues: League[] = [
     id: 'bundesliga',
     name: 'Bundesliga',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Bundesliga alemana a precios baratos. Bayern Munich, Borussia Dortmund y todos los grandes equipos alemanes.',
     seoTitle: 'Camisetas Retro Bundesliga | Equipos Alemanes | Baratas',
     seoDescription: 'Adquiere camisetas retro de equipos de la Bundesliga alemana a precios increíbles. Bayern Munich, Borussia Dortmund y más.',
     teams: [
@@ -194,7 +188,6 @@ export const leagues: League[] = [
     id: 'ligue-1',
     name: 'Ligue 1',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Ligue 1 francesa a precios baratos. PSG, Marseille, Lyon y todos los grandes equipos franceses.',
     seoTitle: 'Camisetas Retro Ligue 1 | Equipos Franceses | Baratas',
     seoDescription: 'Explora camisetas retro de equipos de la Ligue 1 francesa a precios increíbles. Paris Saint-Germain, Marseille, Lyon y más.',
     teams: [
@@ -224,7 +217,6 @@ export const leagues: League[] = [
     id: 'mls',
     name: 'MLS',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la MLS estadounidense a precios baratos. Inter Miami, LA Galaxy y todos los grandes equipos americanos.',
     seoTitle: 'Camisetas Retro MLS | Equipos Estadounidenses | Baratas',
     seoDescription: 'Consigue camisetas retro de equipos de la MLS estadounidense a precios increíbles. Inter Miami, LA Galaxy, LAFC y más.',
     teams: [
@@ -254,7 +246,6 @@ export const leagues: League[] = [
     id: 'brasileirao',
     name: 'Brasileirão',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro del Brasileirão a precios baratos. Flamengo, Palmeiras, Santos y todos los grandes equipos brasileños.',
     seoTitle: 'Camisetas Retro Brasileirão | Equipos Brasileños | Baratas',
     seoDescription: 'Obtén camisetas retro de equipos del Brasileirão a precios increíbles. Flamengo, Palmeiras, Santos, São Paulo y más.',
     teams: [
@@ -284,7 +275,6 @@ export const leagues: League[] = [
     id: 'eredivisie',
     name: 'Eredivisie',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Eredivisie holandesa a precios baratos. Ajax, PSV, Feyenoord y todos los grandes equipos holandeses.',
     seoTitle: 'Camisetas Retro Eredivisie | Equipos Holandeses | Baratas',
     seoDescription: 'Encuentra camisetas retro de equipos de la Eredivisie holandesa a precios increíbles. Ajax, PSV, Feyenoord y más.',
     teams: [
@@ -314,7 +304,6 @@ export const leagues: League[] = [
     id: 'liga-argentina',
     name: 'Liga Argentina',
     icon: 'ShieldCheck',
-    description: 'Camisetas retro de la Liga Argentina a precios baratos. Boca Juniors, River Plate y todos los grandes equipos argentinos.',
     seoTitle: 'Camisetas Retro Liga Argentina | Equipos Argentinos | Baratas',
     seoDescription: 'Descubre camisetas retro de equipos de la Liga Argentina a precios increíbles. Boca Juniors, River Plate, Racing, Independiente y más.',
     teams: [
@@ -344,7 +333,6 @@ export const leagues: League[] = [
     id: 'other',
     name: 'Otras Ligas',
     icon: 'Globe',
-    description: 'Camisetas retro de otras ligas y equipos internacionales a precios baratos. Descubre joyas ocultas del fútbol mundial.',
     seoTitle: 'Camisetas Retro de Otras Ligas | Equipos Internacionales | Baratas',
     seoDescription: 'Explora camisetas retro de equipos de diversas ligas internacionales a precios increíbles. Olympiacos, Fenerbahce, Dinamo Kiev y más.',
     teams: [

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCartStore } from '../store/cartStore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -31,6 +31,27 @@ const JerseyDetail: React.FC = () => {
   const addToCart = useCartStore((state) => state.addItem);
 
   const jersey = jerseys.find(j => j.id === jerseyId);
+
+  // Establecer el título y metaetiquetas de la página
+  useEffect(() => {
+    if (jersey) {
+      // Establecer el título
+      document.title = `${jersey.name} | FutCamisRetros`;
+      
+      // Establecer metaetiquetas
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const description = `Camiseta ${jersey.name} de ${jersey.team}. Calidad premium y envío rápido. Compra ahora en FutCamisRetros.`;
+      
+      if (metaDescription) {
+        metaDescription.setAttribute('content', description);
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = description;
+        document.head.appendChild(meta);
+      }
+    }
+  }, [jersey]);
 
   if (!jersey) {
     return (

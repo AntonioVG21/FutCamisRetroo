@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { jerseys } from '../data/jerseys';
 import JerseyCard from '../components/JerseyCard';
 import Header from '../components/Header';
@@ -8,6 +8,25 @@ import WhatsAppButton from '../components/WhatsAppButton';
 const Kids = () => {
   // Filtrar solo las camisetas de niños
   const kidsJerseys = jerseys.filter(jersey => jersey.isKids);
+
+  // Establecer el título y metaetiquetas de la página
+  useEffect(() => {
+    // Establecer el título
+    document.title = 'Camisetas de Niños | FutCamisRetros';
+    
+    // Establecer metaetiquetas
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const description = 'Encuentra las mejores camisetas de fútbol para niños. Calidad premium y envío rápido. Compra ahora en FutCamisRetros.';
+    
+    if (metaDescription) {
+      metaDescription.setAttribute('content', description);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = description;
+      document.head.appendChild(meta);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900">
