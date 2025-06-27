@@ -58,10 +58,7 @@ function App() {
         <Route path="/league/:leagueId" element={<LeaguePage />} />
         <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
         <Route path="/favorites" element={<Favorites />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin-secret" element={<SecretAdmin />} />
-        <Route path="/admin-packs" element={<AdminPacks />} />
-        <Route path="/secret-admin" element={<SecretAdmin />} />
+        <Route path="/*" element={<Home />} />
       </Routes>
 
       <Cart />

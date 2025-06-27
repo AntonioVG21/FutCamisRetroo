@@ -42,14 +42,14 @@ const Hero: React.FC = () => {
               className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg"
               aria-label="Ver catálogo de camisetas retro de fútbol"
             >
-              VER CAMISETAS RETRO
+              Ver Catálogo
             </a>
             <a 
               href="/packs" 
               className="bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 border border-yellow-500 shadow-lg"
               aria-label="Ver packs sorpresa de camisetas baratas"
             >
-              PACKS SORPRESA
+              Packs Sorpresa
             </a>
           </div>
         </div>

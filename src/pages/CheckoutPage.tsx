@@ -10,6 +10,7 @@ import { discountServices } from '../services/discountServices';
 import BizumCheckout from '../components/BizumCheckout';
 import { emailServices } from '../services/emailService';
 import OrderTracker from '../components/OrderTracker';
+import StripeCheckout from '../components/StripeCheckout';
 
 interface CustomerData {
   name: string;
@@ -46,7 +47,7 @@ const CheckoutPage: React.FC = () => {
   const [discountApplied, setDiscountApplied] = useState(false);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [isCheckingDiscount, setIsCheckingDiscount] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'bizum'>('whatsapp');
+  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'bizum'| 'stripe'>('whatsapp');
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderData, setOrderData] = useState<{ id: string; status: string } | null>(null);
   
@@ -331,6 +332,28 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod('whatsapp');
   };
 
+  const [showStripe, setShowStripe] = useState(false);
+
+  const handleStartStripePayment = async () => {
+    const orderResult = await createOrder();
+    if (orderResult) {
+      setOrderData(orderResult);
+      setPaymentMethod('stripe');
+      setShowStripe(true);
+    }
+  };
+
+  const handleStripeSuccess = () => {
+    handleOrderSuccess({});
+    setShowStripe(false);
+  };
+
+  const handleStripeCancel = () => {
+    setOrderData(null);
+    setPaymentMethod('whatsapp');
+    setShowStripe(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
       <Header />
@@ -350,6 +373,12 @@ const CheckoutPage: React.FC = () => {
               orderData={orderData}
               onSuccess={handleBizumSuccess}
               onCancel={handleBizumCancel}
+            />
+          ) : orderData && paymentMethod === 'stripe' && showStripe ? (
+            <StripeCheckout
+              amount={totalWithDiscount}
+              onSuccess={handleStripeSuccess}
+              onCancel={handleStripeCancel}
             />
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -623,6 +652,14 @@ const CheckoutPage: React.FC = () => {
                     >
                       <FaCreditCard className="h-5 w-5 mr-2" />
                       <span className="text-lg font-semibold">Pagar con Bizum</span>
+                    </button>
+
+                    <button
+                      onClick={handleStartStripePayment}
+                      className="flex items-center justify-center space-x-2 w-full py-4 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                    >
+                      <FaCreditCard className="h-5 w-5 mr-2" />
+                      <span className="text-lg font-semibold">Pagar con Tarjeta (Stripe)</span>
                     </button>
                     
                     <div className="bg-gray-700 p-4 rounded-lg">

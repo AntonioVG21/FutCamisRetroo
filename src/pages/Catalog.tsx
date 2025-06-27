@@ -7,16 +7,24 @@ import { jerseys } from '../data/jerseys';
 import { leagues } from '../data/leagues';
 import { FiShield, FiAward, FiSearch } from 'react-icons/fi';
 
+const PRODUCTS_PER_PAGE = 12;
+
 const Catalog: React.FC = () => {
   const [selectedLeague, setSelectedLeague] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState('default');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   React.useEffect(() => {
     document.title = 'Catálogo - FUTShirts';
   }, []);
 
-  // Filter jerseys by league and search term
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLeague, sortOption, searchTerm]);
+
+
   const filteredJerseys = jerseys.filter(jersey => {
     const matchesLeague = selectedLeague ? jersey.league === selectedLeague : true;
     const matchesSearch = searchTerm.trim() === '' ? true : 
@@ -26,7 +34,6 @@ const Catalog: React.FC = () => {
     return matchesLeague && matchesSearch;
   });
 
-  // Sort jerseys
   const sortedJerseys = [...filteredJerseys].sort((a, b) => {
     switch (sortOption) {
       case 'price-asc':
@@ -41,6 +48,11 @@ const Catalog: React.FC = () => {
         return 0;
     }
   });
+
+  const totalPages = Math.ceil(sortedJerseys.length / PRODUCTS_PER_PAGE);
+  const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIdx = startIdx + PRODUCTS_PER_PAGE;
+  const paginatedJerseys = sortedJerseys.slice(startIdx, endIdx);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900">
@@ -129,12 +141,42 @@ const Catalog: React.FC = () => {
           </div>
 
           {/* Products Grid */}
-          {sortedJerseys.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sortedJerseys.map((jersey) => (
-                <JerseyCard key={jersey.id} jersey={jersey} />
-              ))}
-            </div>
+          {paginatedJerseys.length > 0 ? (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {paginatedJerseys.map((jersey) => (
+                  <JerseyCard key={jersey.id} jersey={jersey} />
+                ))}
+              </div>
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-8 space-x-2">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                  >
+                    &lt;
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-yellow-500 text-black font-bold' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                  >
+                    &gt;
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-12">
               <p className="text-white text-xl">No se encontraron camisetas para esta liga.</p>
