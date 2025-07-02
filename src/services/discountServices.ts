@@ -2,83 +2,68 @@ import { db } from '../lib/firebase';
 import { 
   doc, 
   getDoc, 
-  setDoc,
-  updateDoc,
-  Timestamp 
+  setDoc 
 } from 'firebase/firestore';
 
 interface DiscountStatus {
   code: string;
-  isRedeemed: boolean;
-  redeemedAt?: Timestamp;
   percentage: number;
-  maxUses?: number;
-  currentUses: number;
 }
 
-// Servicios para gestionar descuentos
 export const discountServices = {
-  // Verificar si un código de descuento ya ha sido canjeado
-  checkDiscountStatus: async (code: string): Promise<{ isValid: boolean; percentage?: number }> => {
+  // ✅ Verifica si el código existe y devuelve su porcentaje
+  checkDiscountStatus: async (
+    code: string
+  ): Promise<{ isValid: boolean; percentage?: number }> => {
     try {
       const discountRef = doc(db, 'discounts', code);
       const discountSnap = await getDoc(discountRef);
-      
+
       if (discountSnap.exists()) {
         const discountData = discountSnap.data() as DiscountStatus;
-        const isValid = !discountData.isRedeemed && 
-          (!discountData.maxUses || discountData.currentUses < discountData.maxUses);
         return {
-          isValid,
-          percentage: isValid ? discountData.percentage : undefined
+          isValid: true,
+          percentage: discountData.percentage,
         };
       } else {
         return { isValid: false };
       }
     } catch (error) {
-      console.error('Error al verificar estado del descuento:', error);
+      console.error('Error al verificar el código de descuento:', error);
       throw error;
     }
   },
 
-  // Marcar un código de descuento como canjeado
-  createDiscount: async (code: string, percentage: number = 15, maxUses?: number): Promise<void> => {
+  // ✅ Crea un nuevo código de descuento sin límites
+  createDiscount: async (
+    code: string,
+    percentage: number = 15
+  ): Promise<void> => {
     try {
       const discountRef = doc(db, 'discounts', code);
       await setDoc(discountRef, {
         code,
-        isRedeemed: false,
         percentage,
-        maxUses,
-        currentUses: 0,
-        createdAt: Timestamp.now()
       });
+      console.log(`✅ Código "${code}" creado con ${percentage}% de descuento.`);
     } catch (error) {
-      console.error('Error al crear descuento:', error);
+      console.error('Error al crear el código de descuento:', error);
       throw error;
     }
   },
 
-  redeemDiscount: async (code: string): Promise<void> => {
-    try {
-      const discountRef = doc(db, 'discounts', code);
-      const discountSnap = await getDoc(discountRef);
-      
-      if (discountSnap.exists()) {
-        // Si ya existe, actualizar el estado
-        const discountData = discountSnap.data() as DiscountStatus;
-        await updateDoc(discountRef, {
-          currentUses: discountData.currentUses + 1,
-          isRedeemed: !discountData.maxUses || discountData.currentUses + 1 >= discountData.maxUses,
-          redeemedAt: Timestamp.now()
-        });
-      } else {
-        // Si no existe, crear un nuevo documento
-        throw new Error('El código de descuento no existe');
-      }
-    } catch (error) {
-      console.error('Error al canjear descuento:', error);
-      throw error;
+  // ✅ Configura los códigos predeterminados
+  setupDefaultDiscounts: async (): Promise<void> => {
+    const defaultCodes = [
+      { code: 'LIVERGOL', percentage: 15 },
+      { code: 'RAYOOMANN', percentage: 15 },
+      { code: 'FRANMORENO', percentage: 15 },
+    ];
+
+    for (const discount of defaultCodes) {
+      await discountServices.createDiscount(discount.code, discount.percentage);
     }
+
+    console.log('✅ Códigos predeterminados creados o actualizados.');
   }
 };

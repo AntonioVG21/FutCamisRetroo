@@ -153,13 +153,146 @@ export const contactServices = {
 };
 
 // Servicios para pedidos
+// Servicios para análisis de clientes
+export const clientAnalyticsServices = {
+  // Obtener top clientes por cantidad gastada
+  getTopSpenders: async (limit: number = 10) => {
+    try {
+      const q = query(
+        collection(db, 'clients'),
+        orderBy('totalSpent', 'desc'),
+        limit(limit)
+      );
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      console.error('Error al obtener top spenders:', error);
+      throw error;
+    }
+  },
+
+  // Obtener clientes frecuentes
+  getFrequentBuyers: async (minPurchases: number = 3) => {
+    try {
+      const q = query(
+        collection(db, 'clients'),
+        where('totalPurchases', '>=', minPurchases),
+        orderBy('totalPurchases', 'desc')
+      );
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      console.error('Error al obtener compradores frecuentes:', error);
+      throw error;
+    }
+  },
+
+  // Obtener estadísticas de uso de códigos de descuento
+  getDiscountCodeStats: async () => {
+    try {
+      const snapshot = await getDocs(collection(db, 'clients'));
+      const codeStats: { [key: string]: number } = {};
+      
+      snapshot.docs.forEach(doc => {
+        const data = doc.data();
+        if (data.usedDiscountCodes) {
+          data.usedDiscountCodes.forEach((code: string) => {
+            codeStats[code] = (codeStats[code] || 0) + 1;
+          });
+        }
+      });
+      
+      return Object.entries(codeStats).map(([code, uses]) => ({
+        code,
+        uses
+      }));
+    } catch (error) {
+      console.error('Error al obtener estadísticas de códigos de descuento:', error);
+      throw error;
+    }
+  },
+
+  // Obtener preferencias de ligas más populares
+  getLeaguePreferences: async () => {
+    try {
+      const snapshot = await getDocs(collection(db, 'clients'));
+      const leagueStats: { [key: string]: number } = {};
+      
+      snapshot.docs.forEach(doc => {
+        const data = doc.data();
+        if (data.preferences) {
+          Object.entries(data.preferences).forEach(([league, isPreferred]) => {
+            if (isPreferred) {
+              leagueStats[league] = (leagueStats[league] || 0) + 1;
+            }
+          });
+        }
+      });
+      
+      return Object.entries(leagueStats).map(([league, count]) => ({
+        league,
+        count
+      }));
+    } catch (error) {
+      console.error('Error al obtener preferencias de ligas:', error);
+      throw error;
+    }
+  }
+};
+
 export const orderServices = {
-  // Crear un nuevo pedido
+  // Crear un nuevo pedido y actualizar estadísticas del cliente
   createOrder: async (order: Order) => {
     try {
+      // Buscar cliente existente
+      const clientsRef = collection(db, 'clients');
+      const q = query(clientsRef, where('email', '==', order.customer.email));
+      const clientSnapshot = await getDocs(q);
+      
+      let clientData;
+      if (clientSnapshot.empty) {
+        // Crear nuevo cliente
+        const newClientRef = await addDoc(clientsRef, {
+          email: order.customer.email,
+          name: order.customer.name,
+          phone: order.customer.phone,
+          address: order.customer.address,
+          city: order.customer.city,
+          postalCode: order.customer.postalCode,
+          leagues: order.customer.leagues,
+          firstPurchaseDate: new Date(),
+          lastPurchaseDate: new Date(),
+          totalPurchases: 1,
+          totalSpent: order.total,
+          usedDiscountCodes: order.discountCodes || [],
+          preferences: order.customer.leagues
+        });
+        clientData = { id: newClientRef.id };
+      } else {
+        // Actualizar cliente existente
+        const clientDoc = clientSnapshot.docs[0];
+        const existingData = clientDoc.data();
+        await updateDoc(clientDoc.ref, {
+          lastPurchaseDate: new Date(),
+          totalPurchases: (existingData.totalPurchases || 0) + 1,
+          totalSpent: (existingData.totalSpent || 0) + order.total,
+          usedDiscountCodes: [...(existingData.usedDiscountCodes || []), ...(order.discountCodes || [])],
+          preferences: order.customer.leagues
+        });
+        clientData = { id: clientDoc.id };
+      }
+
+      // Crear el pedido con referencia al cliente
       const docRef = await addDoc(collection(db, 'orders'), {
         ...order,
-        createdAt: new Date()
+        createdAt: new Date(),
+        clientId: clientData.id
       });
       return { id: docRef.id, ...order };
     } catch (error) {

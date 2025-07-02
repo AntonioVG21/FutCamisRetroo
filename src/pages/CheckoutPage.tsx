@@ -254,8 +254,12 @@ const CheckoutPage: React.FC = () => {
         })),
         total: totalWithDiscount,
         status: 'pending',
-        paymentMethod: paymentMethod
-      };
+        paymentMethod: paymentMethod,
+        discountCodes: discountCodes,
+        orderDate: new Date().toISOString(),
+        lastPurchaseDate: new Date().toISOString(),
+        purchaseCount: 1,
+        totalSpent: totalWithDiscount
 
       const orderResponse = await orderServices.createOrder(orderData);
       const newOrderId = orderResponse.id;

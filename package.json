@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "optimize-images": "node scripts/optimizeImages.js",
-    "dev": "vite",
     "build": "npm run optimize-images && vite build",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
   },

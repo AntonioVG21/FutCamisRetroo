@@ -79,8 +79,8 @@ async function copyDirectoryStructure(sourceDir, targetDir) {
           console.log(`Creado directorio: ${targetPath}`);
         }
         
-        // También crear en el directorio WebP
-        const webpPath = path.join(WEBP_DIR, relativePath);
+        // Crear directorio para versiones WebP
+        const webpPath = path.join(targetDir, 'webp', relativePath);
         if (!fs.existsSync(webpPath)) {
           fs.mkdirSync(webpPath, { recursive: true });
           console.log(`Creado directorio WebP: ${webpPath}`);
