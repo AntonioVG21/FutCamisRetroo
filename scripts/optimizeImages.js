@@ -1,8 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const imagemin = require('imagemin');
-const imageminWebp = require('imagemin-webp');
-const imageminMozjpeg = require('imagemin-mozjpeg');
+import fs from 'fs';
+import path from 'path';
+import imagemin from 'imagemin';
+import imageminWebp from 'imagemin-webp';
+import imageminMozjpeg from 'imagemin-mozjpeg';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Directorios de origen y destino
 const SOURCE_DIR = path.join(__dirname, '../public/imagenes');

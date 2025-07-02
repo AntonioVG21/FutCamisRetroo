@@ -43,8 +43,8 @@ interface FormErrors {
 const CheckoutPage: React.FC = () => {
   const { items, total, clearCart } = useCartStore();
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [discountCodes, setDiscountCodes] = useState<string[]>([]);
   const [discountCode, setDiscountCode] = useState('');
-  const [discountApplied, setDiscountApplied] = useState(false);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [isCheckingDiscount, setIsCheckingDiscount] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'bizum'| 'stripe'>('whatsapp');
@@ -166,20 +166,29 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
+    if (discountCodes.includes(discountCode)) {
+      toast.error('Este código ya ha sido aplicado');
+      return;
+    }
+
     setIsCheckingDiscount(true);
     try {
-      const isRedeemed = await discountServices.checkDiscountStatus(discountCode);
-      if (isRedeemed) {
-        toast.error('Este código de descuento ya ha sido utilizado');
+      const result = await discountServices.checkDiscountStatus(discountCode);
+      if (!result.isValid) {
+        toast.error('Código de descuento inválido o ya utilizado');
         setIsCheckingDiscount(false);
         return;
       }
 
-      const discount = 10;
-
-      setDiscountAmount(discount);
-      setDiscountApplied(true);
-      toast.success(`¡Código de descuento aplicado! Descuento: ${discount}€`);
+      const percentage = result.percentage || 15;
+      const newDiscount = (total * percentage) / 100;
+      
+      setDiscountCodes([...discountCodes, discountCode]);
+      setDiscountAmount(discountAmount + newDiscount);
+      setDiscountCode('');
+      
+      await discountServices.redeemDiscount(discountCode);
+      toast.success(`¡Código de descuento aplicado! Descuento: ${newDiscount.toFixed(2)}€`);
     } catch (error) {
       console.error('Error al aplicar el código de descuento:', error);
       toast.error('Error al aplicar el código de descuento');
@@ -188,11 +197,18 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  const handleRemoveDiscount = () => {
-    setDiscountCode('');
-    setDiscountApplied(false);
-    setDiscountAmount(0);
-    toast.success('Código de descuento eliminado');
+  const handleRemoveDiscount = (codeToRemove?: string) => {
+    if (codeToRemove) {
+      setDiscountCodes(discountCodes.filter(code => code !== codeToRemove));
+      const newDiscount = (total * 15 * (discountCodes.length - 1)) / 100;
+      setDiscountAmount(newDiscount);
+      toast.success(`Código de descuento ${codeToRemove} eliminado`);
+    } else {
+      setDiscountCodes([]);
+      setDiscountCode('');
+      setDiscountAmount(0);
+      toast.success('Todos los códigos de descuento eliminados');
+    }
   };
 
   const totalWithDiscount = total - discountAmount;
@@ -293,8 +309,12 @@ const CheckoutPage: React.FC = () => {
       });
 
       message += `\n💰 *Subtotal:* ${total.toFixed(2)}€\n`;
-      if (discountApplied) {
-        message += `🏷️ *Descuento:* -${discountAmount.toFixed(2)}€\n`;
+      if (discountCodes.length > 0) {
+        message += `🏷️ *Códigos de descuento aplicados:*\n`;
+        discountCodes.forEach(code => {
+          message += `   • ${code} (-15%)\n`;
+        });
+        message += `📊 *Descuento total:* -${discountAmount.toFixed(2)}€\n`;
       }
       message += `💵 *TOTAL:* ${totalWithDiscount.toFixed(2)}€\n\n`;
 
@@ -582,34 +602,43 @@ const CheckoutPage: React.FC = () => {
                     ))}
                   </div>
                   
-                  {/* Código de descuento */}
+                  {/* Códigos de descuento */}
                   <div className="mb-6 pt-2 border-t border-gray-700">
-                    <h3 className="text-white font-medium mb-2">Código de Descuento</h3>
+                    <h3 className="text-white font-medium mb-2">Códigos de Descuento</h3>
+                    
+                    {/* Lista de códigos aplicados */}
+                    {discountCodes.length > 0 && (
+                      <div className="mb-4 space-y-2">
+                        {discountCodes.map((code) => (
+                          <div key={code} className="flex items-center justify-between bg-gray-700 p-2 rounded-md">
+                            <span className="text-white">{code} (-15%)</span>
+                            <button
+                              onClick={() => handleRemoveDiscount(code)}
+                              className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Input para nuevo código */}
                     <div className="flex space-x-2">
                       <input
                         type="text"
                         value={discountCode}
                         onChange={(e) => setDiscountCode(e.target.value)}
-                        disabled={discountApplied}
                         placeholder="Introduce tu código"
                         className="flex-1 px-3 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                       />
-                      {discountApplied ? (
-                        <button
-                          onClick={handleRemoveDiscount}
-                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200"
-                        >
-                          Eliminar
-                        </button>
-                      ) : (
-                        <button
-                          onClick={handleApplyDiscount}
-                          disabled={isCheckingDiscount}
-                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {isCheckingDiscount ? 'Aplicando...' : 'Aplicar'}
-                        </button>
-                      )}
+                      <button
+                        onClick={handleApplyDiscount}
+                        disabled={isCheckingDiscount}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isCheckingDiscount ? 'Aplicando...' : 'Aplicar'}
+                      </button>
                     </div>
                   </div>
                   
@@ -619,10 +648,18 @@ const CheckoutPage: React.FC = () => {
                       <span>{total.toFixed(2)} €</span>
                     </div>
                     
-                    {discountApplied && (
-                      <div className="flex justify-between items-center text-lg text-green-400 mb-2">
-                        <span>Descuento</span>
-                        <span>-{discountAmount.toFixed(2)} €</span>
+                    {discountCodes.length > 0 && (
+                      <div className="space-y-2 mb-2">
+                        {discountCodes.map((code) => (
+                          <div key={code} className="flex justify-between items-center text-sm text-green-400">
+                            <span>Descuento ({code})</span>
+                            <span>-15%</span>
+                          </div>
+                        ))}
+                        <div className="flex justify-between items-center text-lg text-green-400 pt-1 border-t border-gray-700">
+                          <span>Descuento Total</span>
+                          <span>-{discountAmount.toFixed(2)} €</span>
+                        </div>
                       </div>
                     )}
                     
