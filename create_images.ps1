@@ -1,46 +1,10 @@
-$files = @(
-    # Archivos originales
-    '102ba103.jpg',
-    '271b3298.jpg',
-    '8886d2e6.jpg',
-    '65307b58.jpg',
-    '86238f0c.jpg',
-    '91528dcd.jpg',
-    'd1ufe7ak.jpg',
-    'd498f5c0.jpg',
-    'e0f24249.jpg',
-    'f2dfb0c1.jpg',
-    'fb23e806.jpg',
-    'ddjksd123d.jpg',
-    '2ddno13i.jpg',
-    's-l1200.jpg',
-    's-l1201.jpg',
-    
-    # Archivos adicionales de las últimas páginas
-    '2ccef3e6.jpg',
-    '2d106c31.jpg',
-    '2f17389b.jpg',
-    '3016b898.jpg',
-    '34a81578.jpg',
-    '3c6baaf6.jpg',
-    '3d302f69.jpg',
-    '4a0e34c7.jpg',
-    '4c55aaa2.jpg',
-    '5a7a233e.jpg',
-    '5cb8c803.jpg',
-    '6b90394c.jpg',
-    'eb06b3f4.jpg',
-    'a0a9f4ef.jpg',
-    '1afda40d.jpg',
-    '4db3623b.jpg',
-    '6be410b8.jpg',
-    '060d8d3a.jpg',
-    '83c69a9c.jpg'
-)
+# No usaremos una lista predefinida, copiaremos todas las imágenes de optimized a camisetas-web
+# y crearemos placeholders para los archivos que no existen en optimized
 
 $basePath = "c:\Users\anton\OneDrive\Escritorio\TiendaOficial\public\imagenes\"
 $targetPath = "$basePath\camisetas-web\"
 $sourcePath = "$basePath\optimized\"
+$placeholderPath = "$basePath\placeholder.jpg"
 
 # Asegurarse de que el directorio destino existe
 if (-not (Test-Path -Path $targetPath)) {
@@ -48,23 +12,55 @@ if (-not (Test-Path -Path $targetPath)) {
     Write-Host "Directorio creado: $targetPath"
 }
 
-foreach ($file in $files) {
+# Buscar una imagen existente para usar como placeholder
+$existingImages = Get-ChildItem -Path $sourcePath -File | Where-Object { $_.Length -gt 0 } | Select-Object -First 1
+
+if ($existingImages) {
+    # Usar la primera imagen encontrada como placeholder
+    $placeholderPath = $existingImages.FullName
+    Write-Host "Usando imagen existente como placeholder: $placeholderPath"
+} else {
+    Write-Host "No se encontraron imágenes existentes para usar como placeholder"
+    exit 1
+}
+
+# Obtener todos los archivos de la carpeta optimized
+$optimizedFiles = Get-ChildItem -Path $sourcePath -File | Select-Object -ExpandProperty Name
+
+Write-Host "Se encontraron $($optimizedFiles.Count) archivos en la carpeta optimized"
+
+# Copiar todos los archivos de optimized a camisetas-web
+foreach ($file in $optimizedFiles) {
     $targetFilePath = "$targetPath$file"
     $sourceFilePath = "$sourcePath$file"
     
-    # Verificar si el archivo ya existe en la carpeta destino
+    # Verificar si el archivo ya existe en la carpeta destino y si tiene contenido
     if (Test-Path -Path $targetFilePath) {
-        Write-Host "El archivo ya existe: $targetFilePath"
-        continue
+        $fileInfo = Get-Item -Path $targetFilePath
+        if ($fileInfo.Length -gt 0) {
+            Write-Host "El archivo ya existe con contenido: $targetFilePath"
+            continue
+        } else {
+            Write-Host "El archivo existe pero está vacío, reemplazando: $targetFilePath"
+        }
     }
     
-    # Intentar copiar desde la carpeta optimized si existe
-    if (Test-Path -Path $sourceFilePath) {
-        Copy-Item -Path $sourceFilePath -Destination $targetFilePath -Force
-        Write-Host "Copiado desde optimized: $targetFilePath"
-    } else {
-        # Si no existe en optimized, crear un archivo vacío
-        New-Item -Path $targetFilePath -ItemType File -Force
-        Write-Host "Creado archivo vacío: $targetFilePath"
+    # Copiar el archivo desde optimized
+    Copy-Item -Path $sourceFilePath -Destination $targetFilePath -Force
+    Write-Host "Copiado desde optimized: $targetFilePath"
+}
+
+# Verificar si hay archivos en camisetas-web que no tienen contenido
+$emptyFiles = Get-ChildItem -Path $targetPath -File | Where-Object { $_.Length -eq 0 } | Select-Object -ExpandProperty Name
+
+if ($emptyFiles.Count -gt 0) {
+    Write-Host "Se encontraron $($emptyFiles.Count) archivos vacíos en camisetas-web"
+    Write-Host "Estos archivos no tienen una versión en la carpeta optimized"
+    
+    # Reemplazar archivos vacíos con el placeholder
+    foreach ($emptyFile in $emptyFiles) {
+        $emptyFilePath = "$targetPath$emptyFile"
+        Copy-Item -Path $placeholderPath -Destination $emptyFilePath -Force
+        Write-Host "Reemplazado archivo vacío con placeholder: $emptyFilePath"
     }
 }
