@@ -260,7 +260,7 @@ const CheckoutPage: React.FC = () => {
         lastPurchaseDate: new Date().toISOString(),
         purchaseCount: 1,
         totalSpent: totalWithDiscount
-
+      }; // <-- ESTA LLAVE CIERRA EL OBJETO
       const orderResponse = await orderServices.createOrder(orderData);
       const newOrderId = orderResponse.id;
 

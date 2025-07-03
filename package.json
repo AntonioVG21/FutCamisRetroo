@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "optimize-images": "node scripts/optimizeImages.js",
-    "build": "npm run optimize-images && vite build",
+    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" npm run optimize-images && vite build",
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -14,6 +14,8 @@
     "@emailjs/browser": "^4.4.1",
     "@lucide/lab": "^0.1.2",
     "@paypal/react-paypal-js": "^8.8.3",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.4.0",
     "@supabase/supabase-js": "^2.39.7",
     "emailjs-com": "^3.2.0",
     "firebase": "^11.8.1",
@@ -37,6 +39,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "cross-env": "^7.0.3",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",

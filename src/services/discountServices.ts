@@ -57,6 +57,7 @@ export const discountServices = {
     const defaultCodes = [
       { code: 'LIVERGOL', percentage: 15 },
       { code: 'RAYOOMANN', percentage: 15 },
+      { code: 'CLAUDITA12', percentage: 15 },
       { code: 'FRANMORENO', percentage: 15 },
     ];
 

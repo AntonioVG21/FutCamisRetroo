@@ -26,27 +26,20 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   useEffect(() => {
     const element = document.getElementById('bizum-checkout');
     if (element) {
-      // Usar setTimeout para asegurar que el scroll ocurre después del renderizado
       setTimeout(() => {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 100);
     }
-    
-    // Ajustar el tamaño en dispositivos móviles
-    const adjustMobileView = () => {
-      if (window.innerWidth < 768) {
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-      }
-      
-      return () => {
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
-      };
+
+    if (window.innerWidth < 768) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
-    
-    const cleanup = adjustMobileView();
-    return cleanup;
   }, []);
   
   const copyReference = async () => {
@@ -68,13 +61,13 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   const handleConfirmPayment = async () => {
     setStep('confirming');
     setCountdown(3);
-    
-    const timer = setInterval(() => {
+
+    const timer = setInterval(async () => {
       setCountdown(prev => {
         if (prev <= 1) {
           clearInterval(timer);
           setStep('completed');
-          
+
           const paymentDetails = {
             paymentMethod: 'bizum',
             reference: reference,
@@ -83,33 +76,30 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
             amount: amount,
             phone: bizumPhone
           };
-          
-          // Guardar en localStorage como respaldo
+
           localStorage.setItem('lastBizumPayment', JSON.stringify({
             ...paymentDetails,
             orderId: orderData.id
           }));
-          
+
           // Actualizar el estado de la orden en Firestore
-          try {
-            // Actualizar el estado de la orden a 'processing'
-            orderServices.updateOrderStatus(orderData.id, 'processing');
-            
-            // Actualizar los detalles de pago
-            orderServices.updateOrderPaymentDetails(orderData.id, {
-              paymentMethod: 'bizum',
-              paymentId: reference,
-              paymentStatus: 'processing',
-              reference: reference,
-              timestamp: new Date()
-            });
-            
-            console.log('Orden actualizada correctamente en Firestore');
-          } catch (error) {
-            console.error('Error al actualizar la orden en Firestore:', error);
-            toast.error('Error al registrar el pago. Por favor, contacta con soporte.');
-          }
-          
+          (async () => {
+            try {
+              await orderServices.updateOrderStatus(orderData.id, 'processing');
+              await orderServices.updateOrderPaymentDetails(orderData.id, {
+                paymentMethod: 'bizum',
+                paymentId: reference,
+                paymentStatus: 'processing',
+                reference: reference,
+                timestamp: new Date()
+              });
+              console.log('Orden actualizada correctamente en Firestore');
+            } catch (error) {
+              console.error('Error al actualizar la orden en Firestore:', error);
+              toast.error('Error al registrar el pago. Por favor, contacta con soporte.');
+            }
+          })();
+
           toast.success('¡Pago registrado! No olvides realizar la transferencia Bizum.');
           onSuccess(paymentDetails);
           return 0;
