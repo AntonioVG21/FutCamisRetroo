@@ -220,8 +220,14 @@ export const setupDefaultDiscounts = async (): Promise<void> => {
     const defaultDiscounts = [
       { code: 'BIENVENIDO10', percentage: 10, maxUses: 999999 },
       { code: 'VERANO20', percentage: 20, maxUses: 999999 },
-      { code: 'PROMO15', percentage: 15, maxUses: 999999 }
-    ];
+      { code: 'PROMO15', percentage: 15, maxUses: 999999 },
+      // Nuevos códigos de descuento del 15%
+      { code: 'CLAUDITA12', percentage: 15, maxUses: 999999 },
+      { code: 'LIVERGOL', percentage: 15, maxUses: 999999 },
+      { code: 'FRANMORENO', percentage: 15, maxUses: 999999 },
+      { code: 'CHIQUITIN', percentage: 15, maxUses: 999999 },
+      { code: 'LIGAIBEROS', percentage: 15, maxUses: 999999 },
+      { code: 'RAYOOMANN', percentage: 15, maxUses: 999999 }
 
     // Crear cada código de descuento si no existe
     for (const discount of defaultDiscounts) {
