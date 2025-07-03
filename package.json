@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "optimize-images": "node scripts/optimizeImages.js",
-    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" npm run optimize-images && vite build",
+    "build": "vite build",
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
