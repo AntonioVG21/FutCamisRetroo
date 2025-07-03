@@ -2,10 +2,10 @@
 
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "export NODE_OPTIONS='--max-old-space-size=8192' && npm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "18.20.2"
   NPM_FLAGS = "--no-audit --no-fund"
 
 # Redirecciones para SPA (Single Page Application)

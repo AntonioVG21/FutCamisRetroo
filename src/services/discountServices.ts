@@ -68,3 +68,5 @@ export const discountServices = {
     console.log('✅ Códigos predeterminados creados o actualizados.');
   }
 };
+
+// "build": "cross-env NODE_OPTIONS='--max-old-space-size=4096' npm run optimize-images && vite build"
