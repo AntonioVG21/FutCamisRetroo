@@ -2,7 +2,7 @@ import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe('pk_test_xxxxxxxxxxxxxxxxxxxxx'); 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm: React.FC<{ amount: number; onSuccess: () => void; onCancel: () => void }> = ({ amount, onSuccess, onCancel }) => {
   const stripe = useStripe();
