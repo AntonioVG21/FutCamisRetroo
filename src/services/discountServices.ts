@@ -227,7 +227,9 @@ export const setupDefaultDiscounts = async (): Promise<void> => {
       { code: 'FRANMORENO', percentage: 15, maxUses: 999999 },
       { code: 'CHIQUITIN', percentage: 15, maxUses: 999999 },
       { code: 'LIGAIBEROS', percentage: 15, maxUses: 999999 },
-      { code: 'RAYOOMANN', percentage: 15, maxUses: 999999 }
+      { code: 'RAYOOMANN', percentage: 15, maxUses: 999999 },
+      { code: 'ONEPITT_', percentage: 15, maxUses: 999999 }
+    ];
 
     // Crear cada código de descuento si no existe
     for (const discount of defaultDiscounts) {

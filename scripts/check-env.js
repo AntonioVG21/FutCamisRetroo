@@ -1,9 +1,14 @@
 #!/usr/bin/env node
+// @ts-check
 
 /**
  * Script para verificar que las variables de entorno necesarias estén definidas
  * Ejecutar con: node scripts/check-env.js
  */
+
+// Cargar variables de entorno desde el archivo .env
+import dotenv from 'dotenv';
+dotenv.config();
 
 const requiredEnvVars = [
   'VITE_FIREBASE_API_KEY',
