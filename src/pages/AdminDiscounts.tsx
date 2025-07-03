@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import { ArrowLeft, Plus, Edit, Trash2, Save, X, BarChart2, Package, Image as ImageIcon, Tag } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { checkDiscountStatus, createDiscount } from '../services/discountServices';
-import { clientServices } from '../services/firebaseServices';
+import { clientAnalyticsServices } from '../services/firebaseServices';
 
 interface DiscountCode {
   code: string;
@@ -43,7 +43,7 @@ const AdminDiscounts: React.FC = () => {
         setLoading(true);
         
         // Cargar estadísticas de uso de códigos
-        const stats = await clientServices.getDiscountCodeStats();
+        const stats = await clientAnalyticsServices.getDiscountCodeStats();
         setDiscountStats(stats);
         
         // Cargar todos los códigos de descuento
