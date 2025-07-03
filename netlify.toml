@@ -7,6 +7,13 @@
 [build.environment]
   NODE_VERSION = "18.20.2"
   NPM_FLAGS = "--no-audit --no-fund"
+  VITE_FIREBASE_API_KEY = "AIzaSyAm00tZ3sBgdxXpYRnCgmVhFLlKZ-X0C4k"
+  VITE_FIREBASE_AUTH_DOMAIN = "futcamisretros-b2413.firebaseapp.com"
+  VITE_FIREBASE_PROJECT_ID = "futcamisretros-b2413"
+  VITE_FIREBASE_STORAGE_BUCKET = "futcamisretros-b2413.appspot.com"
+  VITE_FIREBASE_MESSAGING_SENDER_ID = "917265355922"
+  VITE_FIREBASE_APP_ID = "1:917265355922:web:650947024c0efa3a78424b"
+  VITE_FIREBASE_MEASUREMENT_ID = "G-C45EQ17CFC"
 
 # Redirecciones para SPA (Single Page Application)
 [[redirects]]

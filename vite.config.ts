@@ -1,8 +1,17 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig({
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => {
+  // Carga las variables de entorno según el modo (desarrollo/producción)
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  // Registra las variables de entorno para depuración
+  console.log('Modo:', mode);
+  console.log('Variables de entorno cargadas:', Object.keys(env).filter(key => key.startsWith('VITE_')));
+  
+  return {
   plugins: [
     react(),
     VitePWA({
@@ -48,13 +57,16 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
-    sourcemap: false,
+    sourcemap: true, // Habilitar sourcemaps para depuración
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
-        drop_debugger: true,
+        drop_console: false, // Mantener mensajes de consola para depuración
+        drop_debugger: false, // Mantener debugger para depuración
       },
     },
+    // Asegurarse de que las variables de entorno estén disponibles
+    envPrefix: 'VITE_',
   },
+  };
 });

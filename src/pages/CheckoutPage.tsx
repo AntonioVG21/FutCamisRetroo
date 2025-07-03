@@ -13,6 +13,7 @@ import OrderTracker from '../components/OrderTracker';
 
 import { doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { checkFirebaseConnection, checkDiscountsCollection } from '../utils/firebaseDebug';
 
 interface CustomerData {
   name: string;
@@ -171,7 +172,19 @@ const CheckoutPage: React.FC = () => {
 
     try {
       setIsCheckingDiscount(true);
+      
+      // Verificar conexión a Firebase antes de intentar aplicar el descuento
+      console.log('Verificando conexión a Firebase antes de aplicar descuento...');
+      if (!db) {
+        console.error('Error: Firestore no está inicializado');
+        toast.error('Error de conexión con el servidor. Por favor, inténtalo de nuevo.');
+        setIsCheckingDiscount(false);
+        return;
+      }
+      
+      console.log('Aplicando código de descuento:', discountCode.trim());
       const result = await checkDiscountStatus(discountCode.trim());
+      console.log('Resultado de verificación de descuento:', result);
       
       if (result.isValid) {
         // Verificar si el código ya está aplicado
@@ -199,11 +212,23 @@ const CheckoutPage: React.FC = () => {
         
         toast.success(`¡Código ${result.code} aplicado con ${result.percentage}% de descuento! (${(total * (result.percentage / 100)).toFixed(2)} €)`);
       } else {
-        toast.error(result.message);
+        console.log('Código de descuento inválido:', result.message);
+        toast.error(result.message || 'Código de descuento no válido');
       }
     } catch (error) {
       console.error('Error al aplicar el código de descuento:', error);
-      toast.error('Error al verificar el código de descuento');
+      // Información detallada del error para depuración
+      if (error instanceof Error) {
+        console.error('Detalles del error:', error.message, error.stack);
+      }
+      toast.error('Error al verificar el código de descuento. Por favor, inténtalo de nuevo.');
+      
+      // Intentar diagnosticar el problema
+      try {
+        await checkFirebaseConnection();
+      } catch (diagError) {
+        console.error('Error durante el diagnóstico:', diagError);
+      }
     } finally {
       setIsCheckingDiscount(false);
     }
@@ -270,6 +295,27 @@ const CheckoutPage: React.FC = () => {
       recalculateDiscount(discountCodes);
     }
   }, [total]);
+  
+  // Verificar la conexión a Firebase al cargar el componente
+  useEffect(() => {
+    const verifyFirebaseConnection = async () => {
+      try {
+        console.log('Verificando conexión a Firebase al cargar CheckoutPage...');
+        const isConnected = await checkFirebaseConnection();
+        if (isConnected) {
+          console.log('Conexión a Firebase establecida correctamente');
+          // Verificar la colección de descuentos
+          await checkDiscountsCollection();
+        } else {
+          console.error('No se pudo establecer conexión con Firebase');
+        }
+      } catch (error) {
+        console.error('Error al verificar la conexión a Firebase:', error);
+      }
+    };
+    
+    verifyFirebaseConnection();
+  }, []);
 
   const totalWithDiscount = total - discountAmount;
 
@@ -768,13 +814,26 @@ const CheckoutPage: React.FC = () => {
                       <h4 className="text-white font-semibold mb-2 flex items-center">
                         <span className="mr-2">📱</span> Proceso de WhatsApp:
                       </h4>
-                      <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside">
+                      <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside mb-4">
                         <li>Completa tus datos de envío</li>
                         <li>Haz clic en "Enviar Pedido por WhatsApp"</li>
                         <li>Se abrirá WhatsApp con todos los detalles de tu pedido</li>
                         <li>Envía el mensaje y te responderemos con la confirmación</li>
                         <li>Cada pedido tiene una referencia única para su seguimiento</li>
                       </ul>
+
+                      <h4 className="text-white font-semibold mb-2 flex items-center">
+                        <span className="mr-2">💰</span> Proceso de Bizum:
+                      </h4>
+                      <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside mb-4">
+                        <li>Completa tus datos de envío</li>
+                        <li>Haz clic en "Pagar con Bizum"</li>
+                        <li>Sigue las instrucciones para realizar el pago</li>
+                        <li>Incluye la referencia única en tu pago Bizum</li>
+                        <li>Confirma tu pago a través de WhatsApp</li>
+                      </ul>
+
+
                     </div>
                   </div>
                 </div>

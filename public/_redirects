@@ -1,1 +1,6 @@
+# Redirección para SPA
 /*    /index.html   200
+
+# Permitir solicitudes a Firebase
+/firebase/*  https://firestore.googleapis.com/:splat  200
+/storage/*   https://storage.googleapis.com/:splat   200

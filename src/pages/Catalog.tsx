@@ -152,7 +152,10 @@ const Catalog: React.FC = () => {
               {totalPages > 1 && (
                 <div className="flex flex-wrap justify-center mt-8 gap-2">
                   <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    onClick={() => {
+                      setCurrentPage((p) => Math.max(1, p - 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === 1}
                     className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === 1 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
                     aria-label="Página anterior"
@@ -162,7 +165,10 @@ const Catalog: React.FC = () => {
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i + 1}
-                      onClick={() => setCurrentPage(i + 1)}
+                      onClick={() => {
+                        setCurrentPage(i + 1);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === i + 1 ? 'bg-yellow-500 text-black font-bold' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
                       aria-label={`Página ${i + 1}`}
                     >
@@ -170,7 +176,10 @@ const Catalog: React.FC = () => {
                     </button>
                   ))}
                   <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() => {
+                      setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === totalPages}
                     className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === totalPages ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
                     aria-label="Página siguiente"

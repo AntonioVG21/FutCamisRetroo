@@ -4,15 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "node scripts/check-env.js && vite build",
     "dev": "vite",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check-env": "node scripts/check-env.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@lucide/lab": "^0.1.2",
-    "@paypal/react-paypal-js": "^8.8.3",
     "@supabase/supabase-js": "^2.39.7",
     "emailjs-com": "^3.2.0",
     "firebase": "^11.8.1",
