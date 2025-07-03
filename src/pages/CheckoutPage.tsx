@@ -11,6 +11,8 @@ import BizumCheckout from '../components/BizumCheckout';
 import { emailServices } from '../services/emailService';
 import OrderTracker from '../components/OrderTracker';
 import StripeCheckout from '../components/StripeCheckout';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface CustomerData {
   name: string;
@@ -377,6 +379,21 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod('whatsapp');
     setShowStripe(false);
   };
+
+  // Función para crear un código de descuento en Firestore desde el frontend
+  const crearCodigoDescuento = async (code: string, percentage: number = 15) => {
+    try {
+      const discountRef = doc(db, 'discounts', code);
+      await setDoc(discountRef, {
+        code,
+        percentage,
+      });
+      toast.success(`Código "${code}" creado con ${percentage}% de descuento.`);
+    } catch (error) {
+      toast.error('Error al crear el código de descuento');
+      console.error(error);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-900">
