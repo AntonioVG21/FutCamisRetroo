@@ -3,10 +3,10 @@ import { packs as localPacks } from '../data/packs';
 import { Pack } from '../types';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Edit, Trash2, Save, X, Plus, Upload, Image as ImageIcon, XCircle, Lock, ArrowLeft } from 'lucide-react';
+import { Edit, Trash2, Save, X, Plus, Upload, Image as ImageIcon, XCircle, Lock, ArrowLeft, Package, Tag } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { packServices } from '../services/packServices';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const AdminPacks: React.FC = () => {
   const [packList, setPackList] = useState<Pack[]>([]);
@@ -260,10 +260,10 @@ const AdminPacks: React.FC = () => {
     }
   };
 
-  // Función para volver al panel de administración de camisetas
-  const goToJerseysAdmin = () => {
-    navigate('/secret-admin');
-  };
+  // Ya no necesitamos esta función porque ahora usamos enlaces de navegación
+  // const goToJerseysAdmin = () => {
+  //   navigate('/secret-admin');
+  // };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -272,19 +272,31 @@ const AdminPacks: React.FC = () => {
       <div className="container mx-auto px-4 py-24">
         <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 rounded-lg shadow-lg mb-8">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
+            <div className="flex flex-col">
+            <div className="flex items-center mb-4">
               <Lock className="h-6 w-6 text-yellow-500 mr-2" />
               <h1 className="text-3xl font-bold">Panel de Administración de Packs</h1>
             </div>
+            
+            <div className="flex flex-wrap gap-4 mb-2">
+              <Link to="/secret-admin" className="flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">
+                <ImageIcon size={18} className="mr-2" />
+                Camisetas
+              </Link>
+              
+              <Link to="/admin-packs" className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                <Package size={18} className="mr-2" />
+                Packs
+              </Link>
+              
+              <Link to="/admin-discounts" className="flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">
+                <Tag size={18} className="mr-2" />
+                Códigos de Descuento
+              </Link>
+            </div>
+          </div>
             <div className="flex space-x-4">
-              <button
-                onClick={goToJerseysAdmin}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver a Camisetas
-              </button>
-              <button
+                <button
                 onClick={() => setShowForm(!showForm)}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
               >

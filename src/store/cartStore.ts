@@ -121,6 +121,28 @@ export const useCartStore = create<CartStore>()(
         items: state.items,
         total: state.total,
       }),
+      onRehydrateStorage: (state) => {
+        return (rehydratedState, error) => {
+          if (error) {
+            console.error('Error rehydrating cart:', error);
+            return;
+          }
+          
+          if (rehydratedState) {
+            // Recalcular el total basado en los items cargados
+            const calculatedTotal = rehydratedState.items.reduce(
+              (sum, item) => sum + (item.price * item.quantity),
+              0
+            );
+            
+            // Si el total almacenado es diferente del calculado, actualizarlo
+            if (rehydratedState.total !== calculatedTotal) {
+              console.log('Corrigiendo total del carrito:', rehydratedState.total, '->', calculatedTotal);
+              rehydratedState.total = calculatedTotal;
+            }
+          }
+        };
+      },
     }
   )
 );

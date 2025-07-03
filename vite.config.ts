@@ -14,14 +14,14 @@ export default defineConfig({
         theme_color: '#0c0c14',
         icons: [
           {
-            src: '/imagenes/camisetas-web/Logo-removebg-preview.png',
+            src: '/imagenes/optimized/Logo-removebg-preview.webp',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/webp',
           },
           {
-            src: '/imagenes/camisetas-web/Logo-removebg-preview.png',
+            src: '/imagenes/optimized/Logo-removebg-preview.webp',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/webp',
           },
         ],
       },

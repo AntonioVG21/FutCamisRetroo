@@ -18,6 +18,7 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
 }) => {
   const [step, setStep] = useState<'instructions' | 'confirming' | 'completed'>('instructions');
   const [countdown, setCountdown] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const reference = `FutCamisRetros-${orderData.id.substring(0, 8)}`;
   const bizumPhone = '640660362';
@@ -59,6 +60,9 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   };
   
   const handleConfirmPayment = async () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
     setStep('confirming');
     setCountdown(3);
 
@@ -94,14 +98,15 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
                 timestamp: new Date()
               });
               console.log('Orden actualizada correctamente en Firestore');
+              toast.success('¡Pago registrado! No olvides realizar la transferencia Bizum.');
+              onSuccess(paymentDetails);
             } catch (error) {
               console.error('Error al actualizar la orden en Firestore:', error);
               toast.error('Error al registrar el pago. Por favor, contacta con soporte.');
+              setIsProcessing(false);
             }
           })();
 
-          toast.success('¡Pago registrado! No olvides realizar la transferencia Bizum.');
-          onSuccess(paymentDetails);
           return 0;
         }
         return prev - 1;
@@ -110,23 +115,26 @@ const BizumCheckout: React.FC<BizumCheckoutProps> = ({
   };
 
   const openWhatsApp = () => {
-    const message = `🛒 *NUEVO PEDIDO - PAGO BIZUM*\n\n` +
-                   `💰 *Importe:* ${amount.toFixed(2)}€\n` +
-                   `📱 *Referencia:* ${reference}\n` +
-                   `📞 *Teléfono Bizum:* ${bizumPhone}\n` +
-                   `🆔 *ID Pedido:* ${orderData.id}\n\n` +
-                   `✅ He realizado el pago por Bizum.\n` +
-                   `Por favor, confirma la recepción del pago.\n\n` +
-                   `¡Gracias por tu compra! 🙌`;
-    
-    const whatsappUrl = `https://wa.me/34${bizumPhone}?text=${encodeURIComponent(message)}`;
-    
-    // Abrir en nueva ventana con configuración específica
-    const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer,width=400,height=600');
-    
-    if (!newWindow) {
-      // Fallback si el popup es bloqueado
-      window.location.href = whatsappUrl;
+    try {
+      const message = `🛒 *NUEVO PEDIDO - PAGO BIZUM*\n\n` +
+                     `💰 *Importe:* ${amount.toFixed(2)}€\n` +
+                     `📱 *Referencia:* ${reference}\n` +
+                     `📞 *Teléfono Bizum:* ${bizumPhone}\n` +
+                     `🆔 *ID Pedido:* ${orderData.id}\n\n` +
+                     `✅ He realizado el pago por Bizum.\n` +
+                     `Por favor, confirma la recepción del pago.\n\n` +
+                     `¡Gracias por tu compra! 🙌`;
+      
+      const whatsappUrl = `https://wa.me/34${bizumPhone}?text=${encodeURIComponent(message)}`;
+      
+      // Intentar abrir en nueva ventana
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      
+      // Registrar el evento de apertura de WhatsApp
+      console.log('WhatsApp abierto para confirmación de pago Bizum');
+    } catch (error) {
+      console.error('Error al abrir WhatsApp:', error);
+      toast.error('Error al abrir WhatsApp. Intenta de nuevo o contacta por teléfono.');
     }
   };
 

@@ -4,6 +4,7 @@ import { leagues } from '../data/leagues';
 import { useCartStore } from '../store/cartStore';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useDiscountStore } from '../store/discountStore';
+import OptimizedImage from './OptimizedImage';
 import toast from 'react-hot-toast';
 
 const Header: React.FC = () => {
@@ -52,8 +53,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0 lg:w-1/4 w-auto">
-            <img src="/imagenes/camisetas-web/Logo-removebg-preview.png" alt="FutCamisRetros Logo" className="h-10 mr-2 cursor-pointer" onClick={handleLogoClick} />
-            <div className="text-2xl font-bold mr-2 truncate">
+            <div className="text-xl font-bold mr-2 truncate cursor-pointer" onClick={handleLogoClick}>
               <span className="text-yellow-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">FutCamis</span>
               <span className="text-white drop-shadow-[0_1px_2px_rgba(255,215,0,0.3)]">Retros</span>
             </div>

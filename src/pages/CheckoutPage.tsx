@@ -6,12 +6,12 @@ import Footer from '../components/Footer';
 import { FaWhatsapp, FaCreditCard } from 'react-icons/fa';
 import { orderServices } from '../services/firebaseServices';
 import OrderConfirmation from '../components/OrderConfirmation';
-import { discountServices } from '../services/discountServices';
+import { checkDiscountStatus, createDiscount, redeemDiscount } from '../services/discountServices';
 import BizumCheckout from '../components/BizumCheckout';
 import { emailServices } from '../services/emailService';
 import OrderTracker from '../components/OrderTracker';
-import StripeCheckout from '../components/StripeCheckout';
-import { doc, setDoc } from 'firebase/firestore';
+
+import { doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 interface CustomerData {
@@ -46,10 +46,11 @@ const CheckoutPage: React.FC = () => {
   const { items, total, clearCart } = useCartStore();
   const [orderId, setOrderId] = useState<string | null>(null);
   const [discountCodes, setDiscountCodes] = useState<string[]>([]);
+  const [discountPercentages, setDiscountPercentages] = useState<{[code: string]: number}>({});
   const [discountCode, setDiscountCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [isCheckingDiscount, setIsCheckingDiscount] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'bizum'| 'stripe'>('whatsapp');
+  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'bizum'>('whatsapp');
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderData, setOrderData] = useState<{ id: string; status: string } | null>(null);
   
@@ -168,32 +169,41 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    if (discountCodes.includes(discountCode)) {
-      toast.error('Este código ya ha sido aplicado');
-      return;
-    }
-
-    setIsCheckingDiscount(true);
     try {
-      const result = await discountServices.checkDiscountStatus(discountCode);
-      if (!result.isValid) {
-        toast.error('Código de descuento inválido o ya utilizado');
-        setIsCheckingDiscount(false);
-        return;
+      setIsCheckingDiscount(true);
+      const result = await checkDiscountStatus(discountCode.trim());
+      
+      if (result.isValid) {
+        // Verificar si el código ya está aplicado
+        if (discountCodes.includes(result.code!)) {
+          toast.error(`El código ${result.code} ya está aplicado`);
+          setIsCheckingDiscount(false);
+          return;
+        }
+        
+        // Añadir el código a la lista de códigos aplicados
+        setDiscountCodes([...discountCodes, result.code!]);
+        
+        // Almacenar el porcentaje de descuento para este código
+        setDiscountPercentages(prev => ({
+          ...prev,
+          [result.code!]: result.percentage
+        }));
+        
+        // Calcular el nuevo descuento total
+        const newDiscountAmount = total * (result.percentage / 100);
+        setDiscountAmount(discountAmount + newDiscountAmount);
+        
+        // Limpiar el campo de entrada
+        setDiscountCode('');
+        
+        toast.success(`¡Código ${result.code} aplicado con ${result.percentage}% de descuento! (${(total * (result.percentage / 100)).toFixed(2)} €)`);
+      } else {
+        toast.error(result.message);
       }
-
-      const percentage = result.percentage || 15;
-      const newDiscount = (total * percentage) / 100;
-      
-      setDiscountCodes([...discountCodes, discountCode]);
-      setDiscountAmount(discountAmount + newDiscount);
-      setDiscountCode('');
-      
-      await discountServices.redeemDiscount(discountCode);
-      toast.success(`¡Código de descuento aplicado! Descuento: ${newDiscount.toFixed(2)}€`);
     } catch (error) {
       console.error('Error al aplicar el código de descuento:', error);
-      toast.error('Error al aplicar el código de descuento');
+      toast.error('Error al verificar el código de descuento');
     } finally {
       setIsCheckingDiscount(false);
     }
@@ -201,17 +211,65 @@ const CheckoutPage: React.FC = () => {
 
   const handleRemoveDiscount = (codeToRemove?: string) => {
     if (codeToRemove) {
+      // Obtener el código que se va a eliminar
       setDiscountCodes(discountCodes.filter(code => code !== codeToRemove));
-      const newDiscount = (total * 15 * (discountCodes.length - 1)) / 100;
-      setDiscountAmount(newDiscount);
+      
+      // Eliminar el porcentaje de descuento para este código
+      setDiscountPercentages(prev => {
+        const newPercentages = {...prev};
+        delete newPercentages[codeToRemove];
+        return newPercentages;
+      });
+      
+      // Recalcular el descuento total
+      recalculateDiscount(discountCodes.filter(code => code !== codeToRemove));
+      
       toast.success(`Código de descuento ${codeToRemove} eliminado`);
     } else {
+      // Eliminar todos los códigos
       setDiscountCodes([]);
+      setDiscountPercentages({});
       setDiscountCode('');
       setDiscountAmount(0);
       toast.success('Todos los códigos de descuento eliminados');
     }
   };
+
+  // Función para recalcular el descuento total basado en los códigos aplicados
+  const recalculateDiscount = async (codes: string[]) => {
+    let totalDiscount = 0;
+    
+    for (const code of codes) {
+      try {
+        // Usar el porcentaje almacenado si está disponible
+        if (discountPercentages[code]) {
+          totalDiscount += total * (discountPercentages[code] / 100);
+        } else {
+          // Si no tenemos el porcentaje almacenado, obtenerlo de la API
+          const result = await checkDiscountStatus(code);
+          if (result.isValid) {
+            // Almacenar el porcentaje para futuras referencias
+            setDiscountPercentages(prev => ({
+              ...prev,
+              [code]: result.percentage
+            }));
+            totalDiscount += total * (result.percentage / 100);
+          }
+        }
+      } catch (error) {
+        console.error(`Error al recalcular el descuento para ${code}:`, error);
+      }
+    }
+    
+    setDiscountAmount(totalDiscount);
+  };
+
+  // Recalcular el descuento cuando cambia el total del carrito
+  useEffect(() => {
+    if (discountCodes.length > 0) {
+      recalculateDiscount(discountCodes);
+    }
+  }, [total]);
 
   const totalWithDiscount = total - discountAmount;
 
@@ -318,7 +376,8 @@ const CheckoutPage: React.FC = () => {
       if (discountCodes.length > 0) {
         message += `🏷️ *Códigos de descuento aplicados:*\n`;
         discountCodes.forEach(code => {
-          message += `   • ${code} (-15%)\n`;
+          const percentage = discountPercentages[code] || 15;
+          message += `   • ${code} (-${percentage}%)\n`;
         });
         message += `📊 *Descuento total:* -${discountAmount.toFixed(2)}€\n`;
       }
@@ -347,7 +406,7 @@ const CheckoutPage: React.FC = () => {
   };
 
   const [showOrderTracker, setShowOrderTracker] = useState(false);
-  
+
   const handleBizumSuccess = (details: any) => {
     handleOrderSuccess(details);
     setShowOrderTracker(true);
@@ -358,37 +417,20 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod('whatsapp');
   };
 
-  const [showStripe, setShowStripe] = useState(false);
-
-  const handleStartStripePayment = async () => {
-    const orderResult = await createOrder();
-    if (orderResult) {
-      setOrderData(orderResult);
-      setPaymentMethod('stripe');
-      setShowStripe(true);
-    }
-  };
-
-  const handleStripeSuccess = () => {
-    handleOrderSuccess({});
-    setShowStripe(false);
-  };
-
-  const handleStripeCancel = () => {
-    setOrderData(null);
-    setPaymentMethod('whatsapp');
-    setShowStripe(false);
-  };
+  // Métodos de pago disponibles: WhatsApp y Bizum
 
   // Función para crear un código de descuento en Firestore desde el frontend
-  const crearCodigoDescuento = async (code: string, percentage: number = 15) => {
+  const crearCodigoDescuento = async (code: string, percentage: number = 15, maxUses: number = 999999) => {
     try {
-      const discountRef = doc(db, 'discounts', code);
-      await setDoc(discountRef, {
-        code,
-        percentage,
-      });
-      toast.success(`Código "${code}" creado con ${percentage}% de descuento.`);
+      // Normalizar el código a mayúsculas
+      const normalizedCode = code.toUpperCase();
+      
+      const success = await createDiscount(normalizedCode, percentage, maxUses);
+      if (success) {
+        toast.success(`Código "${normalizedCode}" creado con ${percentage}% de descuento y uso ilimitado.`);
+      } else {
+        toast.error('Error al crear el código de descuento');
+      }
     } catch (error) {
       toast.error('Error al crear el código de descuento');
       console.error(error);
@@ -414,12 +456,6 @@ const CheckoutPage: React.FC = () => {
               orderData={orderData}
               onSuccess={handleBizumSuccess}
               onCancel={handleBizumCancel}
-            />
-          ) : orderData && paymentMethod === 'stripe' && showStripe ? (
-            <StripeCheckout
-              amount={totalWithDiscount}
-              onSuccess={handleStripeSuccess}
-              onCancel={handleStripeCancel}
             />
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -630,17 +666,20 @@ const CheckoutPage: React.FC = () => {
                     {/* Lista de códigos aplicados */}
                     {discountCodes.length > 0 && (
                       <div className="mb-4 space-y-2">
-                        {discountCodes.map((code) => (
-                          <div key={code} className="flex items-center justify-between bg-gray-700 p-2 rounded-md">
-                            <span className="text-white">{code} (-15%)</span>
-                            <button
-                              onClick={() => handleRemoveDiscount(code)}
-                              className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
+                        {discountCodes.map((code) => {
+                          const percentage = discountPercentages[code] || 15;
+                          return (
+                            <div key={code} className="flex items-center justify-between bg-gray-700 p-2 rounded-md">
+                              <span className="text-white">{code} (-{percentage}%)</span>
+                              <button
+                                onClick={() => handleRemoveDiscount(code)}
+                                className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
 
@@ -671,12 +710,17 @@ const CheckoutPage: React.FC = () => {
                     
                     {discountCodes.length > 0 && (
                       <div className="space-y-2 mb-2">
-                        {discountCodes.map((code) => (
-                          <div key={code} className="flex justify-between items-center text-sm text-green-400">
-                            <span>Descuento ({code})</span>
-                            <span>-15%</span>
-                          </div>
-                        ))}
+                        {discountCodes.map((code) => {
+                          const percentage = discountPercentages[code] || 15; // Usar 15% como valor por defecto si no se encuentra
+                          const discountValue = total * (percentage / 100);
+                          
+                          return (
+                            <div key={code} className="flex justify-between items-center text-sm text-green-400">
+                              <span>Descuento ({code})</span>
+                              <span>-{discountValue.toFixed(2)} € ({percentage}%)</span>
+                            </div>
+                          );
+                        })}
                         <div className="flex justify-between items-center text-lg text-green-400 pt-1 border-t border-gray-700">
                           <span>Descuento Total</span>
                           <span>-{discountAmount.toFixed(2)} €</span>
@@ -711,18 +755,18 @@ const CheckoutPage: React.FC = () => {
                       <FaCreditCard className="h-5 w-5 mr-2" />
                       <span className="text-lg font-semibold">Pagar con Bizum</span>
                     </button>
-
-                    <button
-                      onClick={handleStartStripePayment}
-                      className="flex items-center justify-center space-x-2 w-full py-4 px-6 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                    >
-                      <FaCreditCard className="h-5 w-5 mr-2" />
-                      <span className="text-lg font-semibold">Pagar con Tarjeta (Stripe)</span>
-                    </button>
                     
                     <div className="bg-gray-700 p-4 rounded-lg">
                       <h4 className="text-white font-semibold mb-2 flex items-center">
-                        <span className="mr-2">ℹ️</span> Cómo funciona:
+                        <span className="mr-2">ℹ️</span> Métodos de pago disponibles:
+                      </h4>
+                      <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside mb-4">
+                        <li><strong>WhatsApp:</strong> Envía tu pedido por WhatsApp y te contactaremos para coordinar el pago y envío</li>
+                        <li><strong>Bizum:</strong> Realiza el pago directamente mediante Bizum al número que te proporcionaremos</li>
+                      </ul>
+                      
+                      <h4 className="text-white font-semibold mb-2 flex items-center">
+                        <span className="mr-2">📱</span> Proceso de WhatsApp:
                       </h4>
                       <ul className="text-gray-300 text-sm space-y-1 list-disc list-inside">
                         <li>Completa tus datos de envío</li>

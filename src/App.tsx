@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { initGA, trackPageView } from './utils/analytics';
+import { setupDefaultDiscounts } from './services/discountServices';
 
 // Componentes cargados de forma inmediata
 import Cart from './components/Cart';
@@ -18,12 +19,20 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const JerseyDetail = lazy(() => import('./pages/JerseyDetail'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 
+// Lazy loading de páginas de administración
+const AdminPacks = lazy(() => import('./pages/AdminPacks'));
+const AdminDiscounts = lazy(() => import('./pages/AdminDiscounts'));
+
 function App() {
   const location = useLocation();
 
-  // Inicializar Google Analytics
+  // Inicializar Google Analytics y códigos de descuento
   useEffect(() => {
     initGA();
+    // Inicializar códigos de descuento predeterminados (uso ilimitado)
+    setupDefaultDiscounts().catch(error => {
+      console.error('Error al inicializar códigos de descuento:', error);
+    });
   }, []);
 
   // Seguimiento de página
@@ -48,6 +57,11 @@ function App() {
           <Route path="/league/:leagueId" element={<LeaguePage />} />
           <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
           <Route path="/favorites" element={<Favorites />} />
+          
+          {/* Rutas de administración */}
+          <Route path="/admin-packs" element={<AdminPacks />} />
+          <Route path="/admin-discounts" element={<AdminDiscounts />} />
+          
           <Route path="/*" element={<Home />} />
         </Routes>
       </Suspense>

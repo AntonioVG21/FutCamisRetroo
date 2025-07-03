@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCartStore } from '../store/cartStore';
+import { useFavoritesStore } from '../store/favoritesStore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
@@ -8,7 +9,7 @@ import { GiShirt } from 'react-icons/gi';
 import { TbRuler } from 'react-icons/tb';
 import { AiOutlineNumber } from 'react-icons/ai';
 import { BsTypeH1 } from 'react-icons/bs';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { jerseys } from '../data/jerseys';
 import toast from 'react-hot-toast';
 import OptimizedImage from '../components/OptimizedImage';
@@ -23,14 +24,19 @@ interface RouteParams {
 
 const JerseyDetail: React.FC = () => {
   const { jerseyId } = useParams<RouteParams>();
+  const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState('');
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [customName, setCustomName] = useState('');
   const [customNumber, setCustomNumber] = useState('');
   const addToCart = useCartStore((state) => state.addItem);
+  const { addFavorite, removeFavorite, isFavorite } = useFavoritesStore();
 
   const jersey = jerseys.find(j => j.id === jerseyId);
+  
+  // Verificar si la camiseta está en favoritos
+  const isInFavorites = jersey ? isFavorite(jersey.id) : false;
 
   // Establecer el título y metaetiquetas de la página
   useEffect(() => {
@@ -101,8 +107,28 @@ const JerseyDetail: React.FC = () => {
       image: jersey.image,
       customization
     });
+  };
+  
+  // Manejar la adición o eliminación de favoritos
+  const handleToggleFavorite = () => {
+    if (!jersey) return;
     
-    toast.success('Producto añadido al carrito');
+    if (isInFavorites) {
+      removeFavorite(jersey.id);
+    } else {
+      addFavorite({
+        id: jersey.id,
+        name: jersey.name,
+        price: jersey.price,
+        image: jersey.image,
+        team: jersey.team
+      });
+    }
+  };
+  
+  // Navegar a la página de favoritos
+  const goToFavorites = () => {
+    navigate('/favorites');
   };
 
   return (
@@ -121,7 +147,10 @@ const JerseyDetail: React.FC = () => {
                 width={600}
                 height={600}
               />
-              <button className="absolute top-4 right-4 bg-gray-800 hover:bg-gray-700 text-white rounded-full p-2">
+              <button 
+                onClick={handleToggleFavorite}
+                className={`absolute top-4 right-4 ${isInFavorites ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} text-white rounded-full p-2 transition-colors duration-300`}
+              >
                 <FiHeart className="h-6 w-6" />
               </button>
             </div>
@@ -281,13 +310,32 @@ const JerseyDetail: React.FC = () => {
                 <div className="text-xl font-bold text-white mb-4">
                   Precio total: {(jersey.price + (isCustomizing ? CUSTOMIZATION_PRICE : 0)).toFixed(2)}€
                 </div>
-                <button
-                  onClick={handleAddToCart}
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-colors flex items-center justify-center"
-                >
-                  <FiShoppingCart className="h-5 w-5 mr-2" />
-                  Añadir al Carrito
-                </button>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <button
+                    onClick={handleAddToCart}
+                    className="md:col-span-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    <FiShoppingCart className="h-5 w-5 mr-2" />
+                    Añadir al Carrito
+                  </button>
+                  <button
+                    onClick={handleToggleFavorite}
+                    className={`${isInFavorites ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-700 hover:bg-gray-600'} text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center`}
+                  >
+                    <FiHeart className="h-5 w-5 mr-2" />
+                    {isInFavorites ? 'Quitar' : 'Guardar'}
+                  </button>
+                </div>
+                {isInFavorites && (
+                  <div className="mt-3">
+                    <button 
+                      onClick={goToFavorites}
+                      className="w-full bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+                    >
+                      Ver mis favoritos
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
