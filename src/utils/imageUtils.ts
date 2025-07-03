@@ -17,7 +17,11 @@ export const getOptimizedImagePath = (imagePath: string): string => {
   
   // Convertir rutas de camisetas-web a optimized
   if (imagePath.includes('/imagenes/camisetas-web/')) {
-    return imagePath.replace('/imagenes/camisetas-web/', '/imagenes/optimized/');
+    // Extraer el nombre del archivo de la ruta
+    const fileName = imagePath.split('/').pop();
+    if (fileName) {
+      return `/imagenes/optimized/${fileName}`;
+    }
   }
   
   // Para otras rutas de imágenes, intentar usar la versión optimizada

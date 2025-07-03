@@ -150,11 +150,12 @@ const Catalog: React.FC = () => {
               </div>
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex justify-center mt-8 space-x-2">
+                <div className="flex flex-wrap justify-center mt-8 gap-2">
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                    className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === 1 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                    aria-label="Página anterior"
                   >
                     &lt;
                   </button>
@@ -162,7 +163,8 @@ const Catalog: React.FC = () => {
                     <button
                       key={i + 1}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-yellow-500 text-black font-bold' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                      className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === i + 1 ? 'bg-yellow-500 text-black font-bold' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                      aria-label={`Página ${i + 1}`}
                     >
                       {i + 1}
                     </button>
@@ -170,7 +172,8 @@ const Catalog: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                    className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === totalPages ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-yellow-500 hover:text-black'}`}
+                    aria-label="Página siguiente"
                   >
                     &gt;
                   </button>

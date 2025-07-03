@@ -38,29 +38,57 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         // Verificar si la URL es una ruta de Firebase Storage
         if (src.startsWith('gs://') || src.includes('firebasestorage.googleapis.com')) {
           // Es una URL de Firebase Storage, obtener la URL de descarga
-          setImageSrc(src);
+          const storageRef = ref(storage, src);
+          const url = await getDownloadURL(storageRef);
+          console.log('Imagen cargada desde Firebase URL:', url);
+          setImageSrc(url);
           return;
         } 
         
         // Para rutas locales, usar la estrategia de optimización
         if (src.startsWith('/')) {
-          // Obtener la ruta optimizada
-          const optimizedPath = getOptimizedImagePath(src);
-          
-          // Verificar si el navegador soporta WebP
-          const webpSupported = await supportsWebP();
-          
-          if (webpSupported) {
-            // Usar la versión WebP si está disponible
-            const webpPath = getWebPPath(optimizedPath);
-            console.log('Usando versión WebP:', webpPath);
-            setImageSrc(webpPath);
-            return;
+          // Primero intentar con la ruta optimizada
+          try {
+            const optimizedPath = getOptimizedImagePath(src);
+            console.log('Intentando cargar versión optimizada:', optimizedPath);
+            
+            // Verificar si el navegador soporta WebP
+            const webpSupported = await supportsWebP();
+            
+            if (webpSupported && !src.includes('.svg')) {
+              // Usar la versión WebP si está disponible
+              const webpPath = getWebPPath(optimizedPath);
+              console.log('Intentando versión WebP:', webpPath);
+              
+              // Verificar si la imagen WebP existe
+              const webpImg = new Image();
+              webpImg.src = webpPath;
+              
+              // Esperar a que la imagen cargue o falle
+              await new Promise((resolve) => {
+                webpImg.onload = () => {
+                  console.log('WebP cargado correctamente');
+                  setImageSrc(webpPath);
+                  resolve(true);
+                };
+                webpImg.onerror = () => {
+                  console.log('Error al cargar WebP, intentando JPG');
+                  resolve(false);
+                };
+              });
+              
+              if (imageSrc) return; // Si se estableció la imagen WebP, terminar
+            }
+            
+            // Si WebP falló o no es soportado, intentar con JPG optimizado
+            console.log('Usando versión JPG optimizada:', optimizedPath);
+            setImageSrc(optimizedPath);
+          } catch (optimizationError) {
+            console.warn('Error al procesar imagen optimizada:', optimizationError);
+            // Si falla la optimización, usar la URL original
+            console.log('Usando URL original:', src);
+            setImageSrc(src);
           }
-          
-          // Si no se puede usar WebP, usar la versión optimizada JPG
-          console.log('Usando versión optimizada:', optimizedPath);
-          setImageSrc(optimizedPath);
           return;
         }
         
@@ -136,14 +164,33 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
             })
             .catch(error => {
               console.error('Error al cargar desde Firebase:', error);
-              // Si todo falla, mostrar un placeholder
-              setImageError(true);
-              img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666" stroke="%23fff" stroke-width="0.5"><path d="M20 4L16 4 14 2 10 2 8 4 4 4 2 8 4 22 20 22 22 8 20 4zM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" /></svg>';
+              
+              // Intentar con una ruta alternativa en Firebase
+              const altPath = `images${currentSrc}`;
+              console.log('Intentando ruta alternativa en Firebase:', altPath);
+              getDownloadURL(ref(storage, altPath))
+                .then(url => {
+                  img.src = url;
+                })
+                .catch(altError => {
+                  console.error('Error al cargar ruta alternativa:', altError);
+                  // Si todo falla, mostrar un placeholder
+                  setImageError(true);
+                  img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666" stroke="%23fff" stroke-width="0.5"><path d="M20 4L16 4 14 2 10 2 8 4 4 4 2 8 4 22 20 22 22 8 20 4zM12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" /></svg>';
+                });
             });
           return;
         } catch (error) {
           console.error('Error al intentar cargar desde Firebase:', error);
         }
+      }
+      
+      // Estrategia 4: Intentar con una versión sin optimizar
+      if (currentSrc.includes('/optimized/')) {
+        const nonOptimizedSrc = currentSrc.replace('/optimized/', '/');
+        console.log('Intentando cargar versión sin optimizar:', nonOptimizedSrc);
+        img.src = nonOptimizedSrc;
+        return;
       }
       
       // Si todas las estrategias fallan, mostrar un placeholder
