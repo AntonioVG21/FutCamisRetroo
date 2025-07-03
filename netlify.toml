@@ -2,7 +2,7 @@
 
 [build]
   publish = "dist"
-  command = "export NODE_OPTIONS='--max-old-space-size=8192' && npm run build"
+  command = "export NODE_OPTIONS='--max-old-space-size=4096' && npm run build"
 
 [build.environment]
   NODE_VERSION = "18.20.2"
