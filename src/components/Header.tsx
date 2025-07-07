@@ -68,6 +68,9 @@ const Header: React.FC = () => {
             <a href="/packs" className="font-medium hover:text-yellow-500 transition-all duration-300 transform hover:scale-105 border-b-2 border-transparent hover:border-yellow-500 pb-1">
               Packs Sorpresa
             </a>
+            <a href="/complementos" className="font-medium hover:text-yellow-500 transition-all duration-300 transform hover:scale-105 border-b-2 border-transparent hover:border-yellow-500 pb-1">
+              Complementos
+            </a>
             <div className="relative">
               <button 
                 onClick={toggleLeaguesMenu}
@@ -171,6 +174,13 @@ const Header: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               Packs Sorpresa
+            </a>
+            <a 
+              href="/complementos" 
+              className="text-white hover:text-yellow-500 py-2 border-b border-gray-800"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Complementos
             </a>
             <div className="py-2 border-b border-gray-800">
               <div 

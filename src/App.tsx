@@ -14,6 +14,7 @@ import SecretAdmin from './pages/SecretAdmin';
 import AdminPacks from './pages/AdminPacks';
 import Cart from './components/Cart';
 import CustomCookieConsent from './components/CookieConsent';
+import Complementos from './pages/Complementos';
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function App() {
         <Route path="/jersey/:jerseyId" element={<JerseyDetail />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/*" element={<Home />} />
+        <Route path="/complementos" element={<Complementos />} />
       </Routes>
 
       <Cart />
