@@ -88,4 +88,53 @@ export const complementos: Complemento[] = [
     image: "/imagenes/complementos/pulseraUnited.png",
     description: "Pulsera oficial del Manchester United, un detalle perfecto para los aficionados.",
   },
+  {
+    id: "Balon de la Champions 2024/2025",
+    name: "Balón de la Champions 2024/2025",
+    price: 20.00,
+    image: "/imagenes/complementos/championsGreenBall.jpg",
+    description: "Balón oficial de la Champions League 2024/2025, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la Premier League 2024/2025",
+    name: "Balón de la Premier League 2024/2025",
+    price: 20.00,
+    image: "/imagenes/complementos/premierLeagueBall.jpg",
+    description: "Balón oficial de la Premier League 2024/2025, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la Premier League Azul 2024/2025",
+    name: "Balón de la Premier League Azul 2024/2025",
+    price: 20.00,
+    image: "/imagenes/complementos/premierLeagueBallAzul.jpg",
+    description: "Balón oficial de la Premier League 2024/2025, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la Copa del Mundo Brasil 2014",
+    name: "Balón de la Copa del Mundo Brasil 2014",
+    price: 20.00,
+    image: "/imagenes/complementos/worldcupBrasil.jpg",
+    description: "Balón oficial de la Copa del Mundo de Brasil, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la Copa del Mundo Alemania 2006",
+    name: "Balón de la Copa del Mundo Alemania 2006",
+    price: 20.00,
+    image: "/imagenes/complementos/worldcupGermany.jpg",
+    description: "Balón oficial de la Copa del Mundo de Alemania, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la final de la Copa del Mundo Alemania 2006",
+    name: "Balón de la final de la Copa del Mundo Alemania 2006",
+    price: 20.00,
+    image: "/imagenes/complementos/worldcupGermanyFinal.jpg",
+    description: "Balón oficial de la final de la Copa del Mundo de Alemania, ideal para coleccionistas y aficionados.",
+  },
+  {
+    id: "Balon de la Copa del Mundo Sudáfrica 2010",
+    name: "Balón de la Copa del Mundo Sudáfrica 2010",
+    price: 20.00,
+    image: "/imagenes/complementos/worldcupSudafrica.jpg",
+    description: "Balón oficial de la Copa del Mundo de Sudáfrica, ideal para coleccionistas y aficionados.",
+  }
 ];
